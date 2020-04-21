@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--Developer meta tags-->
+    <meta name="description" content="Project 2 for INFO3180. A simple profile manager to create profiles and to view profiles.
+    For this project we will create a fictional Instagram clone called Photogram that we can share photos with our friends and family.
+    Cargill Seiveright, Swayne James, Andryck Rodgers">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
+
+    <!--Page CSS-->
+    {% block css %} {% endblock%}
+
+    <title>Photogram</title>
+  </head>
+  <body class="bg-light">
+    
+    <header>
+        {% include "header.html" %}
+    </header>
+
+    <div class="container">
+
+        <main>
+            {% block main %}{% endblock %}
+        </main>
+
+    </div>
+
+    {% include "footer.html" %}
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    
+    <!--Page JS-->
+    {% block js %} {% endblock%}
+</body>
+</html>
