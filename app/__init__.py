@@ -16,6 +16,5 @@ db = SQLAlchemy(app)
 
 
 csrf = CSRFProtect(app)
-csrf.init_app(app)
 
 from app import views, models
