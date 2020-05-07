@@ -41,8 +41,8 @@ const Home = Vue.component('home', {
             <hr>
             <p>Share your favorite moments with friends, family and the world.</p>
 
-            <button type="button" class="btn btn-success">Success</button>
-            <button type="button" class="btn btn-primary">Primary</button>
+            <button type="button" class="btn btn-success">Register</button>
+            <button type="button" class="btn btn-primary">Login</button>
         </div>
     </div>
    `,

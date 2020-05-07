@@ -17,7 +17,8 @@ body {
 }
 
 #home_img{
-
+    border: 1px solid #888;
+    box-shadow: 0 0 1px 1px #888;
 }
 
 #home_img,img{
@@ -29,4 +30,6 @@ body {
 #home_options{
     background-color: white;
     text-align: center;
+    border: 1px solid #888;
+    box-shadow: 0 0 1px 1px #888;
 }
