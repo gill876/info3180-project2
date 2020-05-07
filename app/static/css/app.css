@@ -1,3 +1,32 @@
 body {
     padding-top: 5rem;
+    background-color: #FEF9E7;
+}
+
+#camera_logo{
+    max-width: 30px;
+    max-height: 30px;
+}
+
+#home_page{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin: auto;
+}
+
+#home_img{
+
+}
+
+#home_img,img{
+    max-width: 350px;
+    max-height: 350px;
+    margin-right: 0.8em;
+}
+
+#home_options{
+    background-color: white;
+    text-align: center;
 }

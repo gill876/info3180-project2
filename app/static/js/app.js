@@ -2,7 +2,7 @@
 Vue.component('app-header', {
     template: `
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-      <a class="navbar-brand" href="#">Photogram</a>
+      <a class="navbar-brand" href="#"> <img id="camera_logo" src="/static/images/photography.png" alt="camera logo"> Photogram</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -30,9 +30,20 @@ Vue.component('app-footer', {
 
 const Home = Vue.component('home', {
    template: `
-    <div class="jumbotron">
-        <h1>Photogram</h1>
-        <img src="/static/uploads/YOUR_IMAGE.jpg" alt="Your comment">
+    <div id="home_page">
+        <div id="home_img">
+            <img src="/static/images/mountains.jpg" alt="mountains homepage">
+        </div>
+
+        <div id="home_options">
+            <img id="camera_logo" src="/static/images/photography.png" alt="camera logo">
+            <h2>Photogram</h2>
+            <hr>
+            <p>Share your favorite moments with friends, family and the world.</p>
+
+            <button type="button" class="btn btn-success">Success</button>
+            <button type="button" class="btn btn-primary">Primary</button>
+        </div>
     </div>
    `,
     data: function() {
