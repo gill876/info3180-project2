@@ -3,6 +3,8 @@ body {
     background-color: #FEF9E7;
 }
 
+/* HOMEPAGE */
+
 #camera_logo{
     max-width: 30px;
     max-height: 30px;
@@ -33,3 +35,40 @@ body {
     border: 1px solid #888;
     box-shadow: 0 0 1px 1px #888;
 }
+
+/* REGISTRATION */
+
+#reg {
+    background-color:white;
+    padding: 20px;
+    border: 1px solid #888;
+    box-shadow: 0 0 1px 1px #888;
+    text-align: center;
+    margin: auto;
+  }
+
+  /* LOGIN */
+
+  #log {
+    background-color:white;
+    padding: 20px;
+    border: 1px solid #888;
+    box-shadow: 0 0 1px 1px #888;
+    text-align: center;
+    margin: auto;
+  }
+
+  /* New Post */
+
+  #newp {
+    background-color:white;
+    padding: 20px;
+    border: 1px solid #888;
+    box-shadow: 0 0 1px 1px #888;
+    text-align: center;
+    margin: auto;
+  }
+
+  /* LOGIN */
+
+  /* LOGIN */

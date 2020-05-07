@@ -8,7 +8,7 @@ Vue.component('app-header', {
       </button>
     
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
             <router-link class="nav-link" to="/">Home <span class="sr-only">(current)</span></router-link>
           </li>
@@ -51,6 +51,117 @@ const Home = Vue.component('home', {
     }
 });
 
+const Register = Vue.component('register', {
+    template: `
+     <div id="registration">
+        <h2>Register</h2>
+        <div id="reg">
+            <form @submit.prevent="reg_form" method="POST" enctype="multipart/form-data" id="reg_form">
+                <p>
+                    <label for="username">Username:</label> <br>
+                    <input v-model="username" required placeholder="edit me">
+                </p>
+
+                <p>
+                    <label for="password">Password:</label> <br>
+                    <input v-model="password" required placeholder="edit me">
+                </p
+
+                <p>
+                    <label for="first name">Firstname:</label> <br>
+                    <input v-model="first_name" required placeholder="edit me">
+                </p>
+
+                <p>
+                    <label for="last name">Lastname:</label> <br>
+                    <input v-model="last_name" required placeholder="edit me">
+                </p>
+
+                <p>
+                    <label for="email">Email:</label> <br>
+                    <input v-model="email" required placeholder="edit me">
+                </p>
+
+                <p>
+                    <label for="location">Location:</label> <br>
+                    <input v-model="location" required placeholder="edit me">
+                </p>
+
+                <p>
+                    <label for="biography">Biography:</label> <br>
+                    <textarea v-model="biography" placeholder="add multiple lines"></textarea>
+                </p>
+
+                <p>
+                    <label for="photo">Photo:</label> <br>
+                    <input type="file" name="photo">
+                </p>
+
+                <button type="button" class="btn btn-success">Register</button>
+
+            </form>
+        </div>
+     </div>
+    `,
+     data: function() {
+        return {}
+     }
+ });
+
+ const Login = Vue.component('login', {
+    template: `
+     <div id="login">
+        <h2>Login</h2>
+        <div id="log">
+            <form @submit.prevent="log_form" method="POST" enctype="multipart/form-data" id="log_form">
+
+                <p>
+                    <label for="username">Username:</label> <br>
+                    <input v-model="username" required placeholder="edit me">
+                </p>
+
+                <p>
+                    <label for="password">Password:</label> <br>
+                    <input v-model="password" required placeholder="edit me">
+                </p>
+
+            </form>
+        </div>
+     </div>
+    `,
+     data: function() {
+        return {}
+     }
+ });
+
+ const NewPosts = Vue.component('newposts', {
+    template: `
+     <div id="newposts">
+        <h2>Login</h2>
+        <div id="newp">
+            <form @submit.prevent="new_posts" method="POST" enctype="multipart/form-data" id="new_posts">
+
+                <p>
+                    <label for="photo">Photo:</label> <br>
+                    <input type="file" name="photo">
+                </p>
+
+                <p>
+                    <label for="caption">Caption:</label> <br>
+                    <textarea v-model="caption" placeholder="write a caption"></textarea>
+                </p>
+
+                <button type="button" class="btn btn-success">Submit</button>
+
+            </form>
+        </div>
+     </div>
+    `,
+     data: function() {
+        return {}
+     }
+ });
+
 const NotFound = Vue.component('not-found', {
     template: `
     <div>
@@ -68,6 +179,11 @@ const router = new VueRouter({
     routes: [
         {path: "/", component: Home},
         // Put other routes here
+        {path: "/register", component: Register},
+
+        {path: "/login", component: Login},
+
+        {path: "/posts/new", component: NewPosts},
 
         // This is a catch all route in case none of the above matches
         {path: "*", component: NotFound}
