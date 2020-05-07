@@ -32,6 +32,7 @@ const Home = Vue.component('home', {
    template: `
     <div class="jumbotron">
         <h1>Photogram</h1>
+        <img src="/static/uploads/YOUR_IMAGE.jpg" alt="Your comment">
     </div>
    `,
     data: function() {
