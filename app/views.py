@@ -5,22 +5,17 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-import os
 from app import app
-from flask import render_template, request, redirect, url_for, flash
-#from .forms import Profile
-#from app.models import ProfileDB
-from . import db
-from werkzeug.utils import secure_filename
-
+from flask import render_template, request
 
 ###
 # Routing for your application.
 ###
+
+
 # Please create all new routes and view functions above this route.
 # This route is now our catch all route for our VueJS single page
 # application.
-
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def index(path):
@@ -33,24 +28,26 @@ def index(path):
     """
     return render_template('index.html')
 
+
+# Here we define a function to collect form errors from Flask-WTF
+# which we can later use
+def form_errors(form):
+    error_messages = []
+    """Collects form errors"""
+    for field, errors in form.errors.items():
+        for error in errors:
+            message = u"Error in the %s field - %s" % (
+                    getattr(form, field).label.text,
+                    error
+                )
+            error_messages.append(message)
+
+    return error_messages
+
+
 ###
 # The functions below should be applicable to all Flask apps.
 ###
-
-def get_uploaded_images():
-    rootdir = os.getcwd()
-    images = []
-    for subdir, dirs, files in os.walk(rootdir + '/app/static/uploads'):
-        for file in files:
-            if ".gitkeep" not in file:
-                images.append(file)
-    return images
-
-def format_date_joined():
-    now = datetime.datetime.now() # today's date
-    date_joined = datetime.date(2019, 2, 7) # a specific date 
-    ## Format the date to return only month and year date
-    return date_joined.strftime("%B, %Y")
 
 
 @app.route('/<file_name>.txt')
