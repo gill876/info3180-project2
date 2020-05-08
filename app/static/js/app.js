@@ -32,17 +32,16 @@ const Home = Vue.component('home', {
    template: `
     <div id="home_page">
         <div id="home_img">
-            <img src="/static/images/mountains.jpg" alt="mountains homepage">
+            <img id="mountain_home" src="/static/images/mac-osx-sierra-lu-1366x768.jpg" alt="mountains homepage">
         </div>
 
         <div id="home_options">
-            <img id="camera_logo" src="/static/images/photography.png" alt="camera logo">
-            <h2>Photogram</h2>
+            <h2><img id="camera_logo" src="/static/images/photography.png" alt="camera logo"> Photogram</h2>
             <hr>
             <p>Share your favorite moments with friends, family and the world.</p>
 
-            <button type="button" class="btn btn-success">Register</button>
-            <button type="button" class="btn btn-primary">Login</button>
+            <button class="widebtn_home" type="button" class="btn btn-success">Register</button>
+            <button class="widebtn_home" type="button" class="btn btn-primary">Login</button>
         </div>
     </div>
    `,
@@ -54,50 +53,50 @@ const Home = Vue.component('home', {
 const Register = Vue.component('register', {
     template: `
      <div id="registration">
-        <h2>Register</h2>
+        <h2 id="reg_head">Register</h2>
         <div id="reg">
             <form @submit.prevent="reg_form" method="POST" enctype="multipart/form-data" id="reg_form">
-                <p>
+                <p class="reg_form">
                     <label for="username">Username:</label> <br>
-                    <input v-model="username" required placeholder="edit me">
+                    <input class="form_ele" v-model="username" required placeholder="Enter username">
                 </p>
 
-                <p>
+                <p class="reg_form">
                     <label for="password">Password:</label> <br>
-                    <input v-model="password" required placeholder="edit me">
-                </p
+                    <input class="form_ele" v-model="password" required placeholder="Enter password">
+                </p>
 
-                <p>
+                <p class="reg_form">
                     <label for="first name">Firstname:</label> <br>
-                    <input v-model="first_name" required placeholder="edit me">
+                    <input class="form_ele" v-model="first_name" required placeholder="First name">
                 </p>
 
-                <p>
+                <p class="reg_form">
                     <label for="last name">Lastname:</label> <br>
-                    <input v-model="last_name" required placeholder="edit me">
+                    <input class="form_ele" v-model="last_name" required placeholder="Last name">
                 </p>
 
-                <p>
+                <p class="reg_form">
                     <label for="email">Email:</label> <br>
-                    <input v-model="email" required placeholder="edit me">
+                    <input class="form_ele" v-model="email" required placeholder="Enter email">
                 </p>
 
-                <p>
+                <p class="reg_form">
                     <label for="location">Location:</label> <br>
-                    <input v-model="location" required placeholder="edit me">
+                    <input class="form_ele" v-model="location" required placeholder="Enter location">
                 </p>
 
-                <p>
+                <p class="reg_form">
                     <label for="biography">Biography:</label> <br>
-                    <textarea v-model="biography" placeholder="add multiple lines"></textarea>
+                    <textarea id="form_bib" class="form_ele" v-model="biography" placeholder="add multiple lines"></textarea>
                 </p>
 
-                <p>
+                <p class="reg_form">
                     <label for="photo">Photo:</label> <br>
                     <input type="file" name="photo">
                 </p>
 
-                <button type="button" class="btn btn-success">Register</button>
+                <button id="reg_button" type="button" class="btn btn-success">Register</button>
 
             </form>
         </div>
@@ -126,6 +125,18 @@ const Register = Vue.component('register', {
                 </p>
 
             </form>
+        </div>
+     </div>
+    `,
+     data: function() {
+        return {}
+     }
+ });
+
+ const Explore = Vue.component('explore', {
+    template: `
+     <div id="explore">
+        <div id="exp">
         </div>
      </div>
     `,
@@ -182,6 +193,8 @@ const router = new VueRouter({
         {path: "/register", component: Register},
 
         {path: "/login", component: Login},
+
+        {path: "/explore", component: Explore},
 
         {path: "/posts/new", component: NewPosts},
 
