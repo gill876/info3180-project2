@@ -41,8 +41,13 @@ body {
     box-shadow: 0 0 1px 1px #888;
 }
 
-.btn, .widebtn_home{
-    min-width:210px;
+.btn, #home_btn1{
+    min-width:220px;
+    margin-right: 0.5em;
+}
+
+.btn, #home_btn2{
+    min-width:220px;
     margin-right: 0.5em;
 }
 
@@ -63,7 +68,7 @@ body {
     box-shadow: 0 0 1px 1px #888;
     text-align: left;
     margin: auto;
-  }
+}
 
 .reg_form{
     margin-left: 1.5em;
@@ -86,28 +91,92 @@ body {
     height: 90px;
 }
 
-  /* LOGIN */
+/* LOGIN */
 
-  #log {
+#log_head{
+    text-align: center;
+    margin-right: 10.0em;
+    margin-top: 1.5em;
+}
+
+#log {
     background-color:white;
-    padding: 20px;
+    width: 400px;
+    height: 300px;
     border: 1px solid #888;
     box-shadow: 0 0 1px 1px #888;
-    text-align: center;
+    text-align: left;
     margin: auto;
-  }
+    margin-bottom: 30%;
+}
 
-  /* New Post */
+#log_u{
+    margin-top: 1.4em;
+}
 
-  #newp {
+.log_info{
+    margin-left: 1.4em;
+    margin-top: auto;
+}
+
+.log_ele{
+    width: 340px;
+}
+
+#log_button{
+    margin-left: 1.4em;
+    margin-top: 1.8em;
+}
+
+.btn,#log_button{
+    min-width:342px;
+}
+
+/* New Post */
+
+#newp_head{
+    text-align: center;
+    margin-right: 7.9em;
+    margin-top: 1.5em;
+}
+
+#newp {
     background-color:white;
-    padding: 20px;
+    width: 400px;
+    height: 300px;
     border: 1px solid #888;
     box-shadow: 0 0 1px 1px #888;
-    text-align: center;
+    text-align: left;
     margin: auto;
-  }
+    margin-bottom: 30%;
+}
 
-  /* LOGIN */
+#newp_photo{
+    margin-top: 1.4em;
+}
 
-  /* LOGIN */
+.newp_info{
+    margin-left: 1.4em;
+    margin-top: auto;
+}
+
+#newp_ele{
+    width: 340px;
+}
+
+#newp_txt{
+    width: 340px;
+}
+
+#newp_button{
+    margin-left: 1.4em;
+    margin-top: 1.8em;
+}
+
+.btn,#newp_button{
+  min-width:342px;
+}
+
+/* LOGIN */
+
+/* LOGIN */

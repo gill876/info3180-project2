@@ -12,6 +12,15 @@ Vue.component('app-header', {
           <li class="nav-item active">
             <router-link class="nav-link" to="/">Home <span class="sr-only">(current)</span></router-link>
           </li>
+          <li class="nav-item active">
+            <router-link class="nav-link" to="/explore">Explore <span class="sr-only">(current)</span></router-link>
+          </li>
+          <li class="nav-item active">
+            <router-link class="nav-link" to="/users/{user_id}">My Profile <span class="sr-only">(current)</span></router-link>
+          </li>
+          <li class="nav-item active">
+            <router-link class="nav-link" to="/logout">Logout <span class="sr-only">(current)</span></router-link>
+          </li>
         </ul>
       </div>
     </nav>
@@ -40,8 +49,8 @@ const Home = Vue.component('home', {
             <hr>
             <p>Share your favorite moments with friends, family and the world.</p>
 
-            <button class="widebtn_home" type="button" class="btn btn-success">Register</button>
-            <button class="widebtn_home" type="button" class="btn btn-primary">Login</button>
+            <button id="home_btn1" type="button" class="btn btn-success">Register</button>
+            <button id="home_btn2" type="button" class="btn btn-primary">Login</button>
         </div>
     </div>
    `,
@@ -110,19 +119,21 @@ const Register = Vue.component('register', {
  const Login = Vue.component('login', {
     template: `
      <div id="login">
-        <h2>Login</h2>
+        <h2 id="log_head">Login</h2>
         <div id="log">
             <form @submit.prevent="log_form" method="POST" enctype="multipart/form-data" id="log_form">
 
-                <p>
-                    <label for="username">Username:</label> <br>
-                    <input v-model="username" required placeholder="edit me">
+                <p class="log_info">
+                    <label  id="log_u" for="username">Username:</label> <br>
+                    <input class="log_ele" v-model="username" required placeholder="Enter username">
                 </p>
 
-                <p>
+                <p class="log_info">
                     <label for="password">Password:</label> <br>
-                    <input v-model="password" required placeholder="edit me">
+                    <input class="log_ele" v-model="password" required placeholder="Enter password">
                 </p>
+
+                <button id="log_button" type="button" class="btn btn-success">Login</button>
 
             </form>
         </div>
@@ -148,21 +159,21 @@ const Register = Vue.component('register', {
  const NewPosts = Vue.component('newposts', {
     template: `
      <div id="newposts">
-        <h2>Login</h2>
+        <h2 id="newp_head">New Posts</h2>
         <div id="newp">
             <form @submit.prevent="new_posts" method="POST" enctype="multipart/form-data" id="new_posts">
 
-                <p>
-                    <label for="photo">Photo:</label> <br>
-                    <input type="file" name="photo">
+                <p class="newp_info">
+                    <label id="newp_photo" for="photo">Photo:</label> <br>
+                    <input id="newp_ele" type="file" name="photo">
                 </p>
 
-                <p>
+                <p class="newp_info">
                     <label for="caption">Caption:</label> <br>
-                    <textarea v-model="caption" placeholder="write a caption"></textarea>
+                    <textarea id="newp_txt" v-model="caption" placeholder="write a caption..."></textarea>
                 </p>
 
-                <button type="button" class="btn btn-success">Submit</button>
+                <button id="newp_button" type="button" class="btn btn-success">Submit</button>
 
             </form>
         </div>
