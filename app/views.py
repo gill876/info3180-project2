@@ -6,11 +6,47 @@ This file creates your application.
 """
 
 from app import app
-from flask import render_template, request
+from flask import render_template, request, jsonify
+from .forms import UploadForm
+from werkzeug.utils import secure_filename
+import os
+import uuid
+import hashlib
 
 ###
 # Routing for your application.
 ###
+
+@app.route('/api/users/register', methods=['POST'])
+def register():
+    pass
+
+@app.route('/api/auth/login', methods=['POST'])
+def login():
+    pass
+
+@app.route('/api/auth/logout', methods=['GET'])
+def logout():
+    pass
+
+@app.route('/api/users/<userid>/posts', methods=['POST', 'GET'])
+def userPosts(userid):
+    pass
+
+@app.route('/api/users/<userid>/follow', methods=['POST'])
+def follow(userid):
+    pass
+
+@app.route('/api/posts', methods=['GET'])
+def posts():
+    pass
+
+@app.route('/api/posts/<postid>/like', methods=['POST'])
+def like():
+    pass
+
+
+
 
 
 # Please create all new routes and view functions above this route.

@@ -3,7 +3,6 @@ import requests
 from flask_wtf.csrf import CSRFProtect
 import os
 from flask_sqlalchemy import SQLAlchemy
-import hashlib
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Fd?d8+T_9LjRGyyM-7&hTwejt!+tDTayFgEnqu?wWAcd-7+RL5sFkveTx8ExSbaUP2#3f'
@@ -14,5 +13,6 @@ app.config['SALT'] = 'r?fPfnryZfJ=M*aQxz$h2_F#!X@YR9nEB&f^SU3qRkVTt3WeP528BRYGth
 db = SQLAlchemy(app)
 
 csrf = CSRFProtect(app)
+csrf.init_app(app)
 
 from app import views, models
