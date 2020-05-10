@@ -7,7 +7,9 @@ This file creates your application.
 
 from app import app
 from flask import render_template, request, jsonify
-from .forms import UploadForm
+from .forms import UserForm
+from app.models import Users
+from . import db
 from werkzeug.utils import secure_filename
 import os
 import uuid
