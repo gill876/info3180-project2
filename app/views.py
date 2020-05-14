@@ -21,7 +21,39 @@ import hashlib
 
 @app.route('/api/users/register', methods=['POST'])
 def register():
-    pass
+    user = UserForm()
+    message = [{"errors": "critical error"}]
+    if request.method == 'POST':
+        user.username.data = request.form['username']
+        user.password.data = request.form['password']
+        user.firstname.data = request.form['firstname']
+        user.lastname.data = request.form['lastname']
+        user.email.data = request.form['email']
+        user.location.data = request.form['location']
+        user.biography.data = request.form['biography']
+        user.profile_photo.data = request.files['photo']
+        message = [{"errors": form_errors(user)}]
+        if user.validate_on_submit():
+            username = user.username.data
+            password = user.password.data
+            firstname = user.firstname.data
+            lastname = user.lastname.data
+            email = user.email.data
+            location = user.location.data
+            biography = user.biography.data
+            profile_photo = user.profile_photo.data
+
+            filename = genUniqueFileName(profile_photo.filename)
+
+            userDB = Users(username, (hashlib.sha256(password.encode()).hexdigest()), firstname, lastname, email, location, biography, filename)
+            db.session.add(userDB)
+            db.session.commit()
+            profile_photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            message = [{"message": "Successful Registered!"}]
+
+    message = jsonify(message=message)
+    return message
 
 @app.route('/api/auth/login', methods=['POST'])
 def login():
@@ -87,6 +119,13 @@ def form_errors(form):
 # The functions below should be applicable to all Flask apps.
 ###
 
+def genUniqueFileName(old_filename):
+    filename = str(uuid.uuid4())
+    ext = old_filename.split(".")
+    ext = ext[1]
+    new_filename = filename + "." + ext
+    new_filename = new_filename.replace('-', '_')
+    return new_filename
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):

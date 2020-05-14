@@ -64,55 +64,75 @@ const Register = Vue.component('register', {
      <div id="registration">
         <h2 id="reg_head">Register</h2>
         <div id="reg">
-            <form @submit.prevent="reg_form" method="POST" enctype="multipart/form-data" id="reg_form">
+            <form @submit.prevent="regForm" method="POST" enctype="multipart/form-data" id="reg_form">
                 <p class="reg_form">
                     <label for="username">Username:</label> <br>
-                    <input class="form_ele" v-model="username" required placeholder="Enter username">
+                    <input class="form_ele" name="username" required placeholder="Enter username">
                 </p>
 
                 <p class="reg_form">
                     <label for="password">Password:</label> <br>
-                    <input class="form_ele" v-model="password" required placeholder="Enter password">
+                    <input name="password" class="form_ele" required placeholder="Enter password">
                 </p>
 
                 <p class="reg_form">
-                    <label for="first name">Firstname:</label> <br>
-                    <input class="form_ele" v-model="first_name" required placeholder="First name">
+                    <label for="firstname">Firstname:</label> <br>
+                    <input name="firstname" class="form_ele" required placeholder="First name">
                 </p>
 
                 <p class="reg_form">
-                    <label for="last name">Lastname:</label> <br>
-                    <input class="form_ele" v-model="last_name" required placeholder="Last name">
+                    <label for="lastname">Lastname:</label> <br>
+                    <input name="lastname" class="form_ele" required placeholder="Last name">
                 </p>
 
                 <p class="reg_form">
                     <label for="email">Email:</label> <br>
-                    <input class="form_ele" v-model="email" required placeholder="Enter email">
+                    <input name="email" class="form_ele" required placeholder="Enter email">
                 </p>
 
                 <p class="reg_form">
                     <label for="location">Location:</label> <br>
-                    <input class="form_ele" v-model="location" required placeholder="Enter location">
+                    <input name="location" class="form_ele" required placeholder="Enter location">
                 </p>
 
                 <p class="reg_form">
                     <label for="biography">Biography:</label> <br>
-                    <textarea id="form_bib" class="form_ele" v-model="biography" placeholder="add multiple lines"></textarea>
+                    <textarea name="biography" class="form_ele" placeholder="add multiple lines"></textarea>
                 </p>
 
                 <p class="reg_form">
                     <label for="photo">Photo:</label> <br>
-                    <input type="file" name="photo">
+                    <input id="photo" type="file" name="photo">
                 </p>
 
-                <button id="reg_button" type="button" class="btn btn-success">Register</button>
+                <button type="submit" id="reg_button" class="btn btn-success">Register</button>
 
             </form>
         </div>
      </div>
     `,
      data: function() {
-        return {}
+        return {
+            messages: ''
+        }
+     },
+
+     methods: {
+        regForm: function(){
+            console.log("hi hello")
+            let self = this;
+            let reg_form = document.getElementById('reg_form');
+            let form_data = new FormData(reg_form);
+            fetch("/api/users/register", { method: 'POST', body: form_data, headers: { 'X-CSRFToken': token }, credentials: 'same-origin'}).then(function (response) {
+                return response.json();
+                }).then(function (jsonResponse) {
+                    // display a success message
+                    console.log(jsonResponse);
+                    self.messages = jsonResponse;
+                }).catch(function (error) {
+                        console.log(error);
+                    });
+        }
      }
  });
 
@@ -125,12 +145,12 @@ const Register = Vue.component('register', {
 
                 <p class="log_info">
                     <label  id="log_u" for="username">Username:</label> <br>
-                    <input class="log_ele" v-model="username" required placeholder="Enter username">
+                    <input class="log_ele" required placeholder="Enter username">
                 </p>
 
                 <p class="log_info">
                     <label for="password">Password:</label> <br>
-                    <input class="log_ele" v-model="password" required placeholder="Enter password">
+                    <input class="log_ele" required placeholder="Enter password">
                 </p>
 
                 <button id="log_button" type="button" class="btn btn-success">Login</button>
@@ -170,7 +190,7 @@ const Register = Vue.component('register', {
 
                 <p class="newp_info">
                     <label for="caption">Caption:</label> <br>
-                    <textarea id="newp_txt" v-model="caption" placeholder="write a caption..."></textarea>
+                    <textarea id="newp_txt" placeholder="write a caption..."></textarea>
                 </p>
 
                 <button id="newp_button" type="button" class="btn btn-success">Submit</button>
