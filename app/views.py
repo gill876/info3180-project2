@@ -5,12 +5,14 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-from app import app
+from app import app, login_manager
 from flask import render_template, request, jsonify
-from .forms import UserForm
+from flask_login import login_user, logout_user, current_user, login_required
+from .forms import UserForm, LoginForm
 from app.models import Users
 from . import db
 from werkzeug.utils import secure_filename
+from werkzeug.security import check_password_hash
 import os
 import uuid
 import hashlib
@@ -44,8 +46,8 @@ def register():
             profile_photo = user.profile_photo.data
 
             filename = genUniqueFileName(profile_photo.filename)
-
-            userDB = Users(username, (hashlib.sha256(password.encode()).hexdigest()), firstname, lastname, email, location, biography, filename)
+            #(hashlib.sha256(password.encode()).hexdigest())
+            userDB = Users(username, password, firstname, lastname, email, location, biography, filename)
             db.session.add(userDB)
             db.session.commit()
             profile_photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -57,7 +59,27 @@ def register():
 
 @app.route('/api/auth/login', methods=['POST'])
 def login():
-    pass
+    form = LoginForm()
+    message = [{"errors": "Invalid request"}]
+    if request.method == "POST":
+        form.username.data = request.form['username']
+        form.password.data = request.form['password']
+        message = [{"errors": form_errors(form)}]
+
+        if form.validate_on_submit():
+            username = form.username.data
+            password = form.password.data
+            user = Users.query.filter_by(username=username).first()
+
+            if user is not None and check_password_hash(user.password, password):
+
+                login_user(user)
+
+                message = [{"message": "Successful Logged In!"}]
+            else:
+                message = [{"errors": "Failed to Log In"}]
+    message = jsonify(message=message)
+    return message
 
 @app.route('/api/auth/logout', methods=['GET'])
 def logout():
@@ -80,7 +102,9 @@ def like():
     pass
 
 
-
+@login_manager.user_loader
+def load_user(id):
+    return Users.query.get(int(id))
 
 
 # Please create all new routes and view functions above this route.

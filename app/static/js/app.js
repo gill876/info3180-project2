@@ -63,6 +63,7 @@ const Register = Vue.component('register', {
     template: `
      <div id="registration">
         <h2 id="reg_head">Register</h2>
+        <div>{{messages}}</div>
         <div id="reg">
             <form @submit.prevent="regForm" method="POST" enctype="multipart/form-data" id="reg_form">
                 <p class="reg_form">
@@ -72,7 +73,7 @@ const Register = Vue.component('register', {
 
                 <p class="reg_form">
                     <label for="password">Password:</label> <br>
-                    <input name="password" class="form_ele" required placeholder="Enter password">
+                    <input name="password" type="password" class="form_ele" required placeholder="Enter password">
                 </p>
 
                 <p class="reg_form">
@@ -119,7 +120,7 @@ const Register = Vue.component('register', {
 
      methods: {
         regForm: function(){
-            console.log("hi hello")
+            //console.log("hi hello")
             let self = this;
             let reg_form = document.getElementById('reg_form');
             let form_data = new FormData(reg_form);
@@ -140,27 +141,47 @@ const Register = Vue.component('register', {
     template: `
      <div id="login">
         <h2 id="log_head">Login</h2>
+        <div>{{messages}}</div>
         <div id="log">
-            <form @submit.prevent="log_form" method="POST" enctype="multipart/form-data" id="log_form">
+            <form @submit.prevent="loginForm" method="POST" id="log_form">
 
                 <p class="log_info">
                     <label  id="log_u" for="username">Username:</label> <br>
-                    <input class="log_ele" required placeholder="Enter username">
+                    <input name="username" class="log_ele" required placeholder="Enter username">
                 </p>
 
                 <p class="log_info">
                     <label for="password">Password:</label> <br>
-                    <input class="log_ele" required placeholder="Enter password">
+                    <input name="password" type="password" class="log_ele" required placeholder="Enter password">
                 </p>
 
-                <button id="log_button" type="button" class="btn btn-success">Login</button>
+                <button id="log_button" type="submit" class="btn btn-success">Login</button>
 
             </form>
         </div>
      </div>
     `,
      data: function() {
-        return {}
+        return {
+            messages: ''
+        }
+     },
+
+    methods: {
+        loginForm: function(){
+            let self = this;
+            let log_form = document.getElementById('log_form');
+            let form_data = new FormData(log_form);
+            fetch("/api/auth/login", { method: 'POST', body: form_data, headers: { 'X-CSRFToken': token }, credentials: 'same-origin'}).then(function (response) {
+                return response.json();
+                }).then(function (jsonResponse) {
+                    // display a success message
+                    console.log(jsonResponse);
+                    self.messages = jsonResponse;
+                }).catch(function (error) {
+                        console.log(error);
+                    });
+        }
      }
  });
 
