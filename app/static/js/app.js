@@ -163,7 +163,8 @@ const Register = Vue.component('register', {
     `,
      data: function() {
         return {
-            messages: ''
+            messages: '',
+            token: ''
         }
      },
 
@@ -178,6 +179,13 @@ const Register = Vue.component('register', {
                     // display a success message
                     console.log(jsonResponse);
                     self.messages = jsonResponse;
+                    let jwt_token = jsonResponse.data.token;
+
+                    // We store this token in localStorage so that subsequent API requests
+                    // can use the token until it expires or is deleted.
+                    localStorage.setItem('token', jwt_token);
+                    console.info('Token generated and added to localStorage.');
+                    self.token = jwt_token;
                 }).catch(function (error) {
                         console.log(error);
                     });
@@ -201,8 +209,11 @@ const Register = Vue.component('register', {
     template: `
      <div id="newposts">
         <h2 id="newp_head">New Posts</h2>
+        <div class="result alert alert-info">
+            {{ result }}
+        </div>
         <div id="newp">
-            <form @submit.prevent="new_posts" method="POST" enctype="multipart/form-data" id="new_posts">
+            <form @submit.prevent="getSecure" method="POST" enctype="multipart/form-data" id="new_posts">
 
                 <p class="newp_info">
                     <label id="newp_photo" for="photo">Photo:</label> <br>
@@ -211,17 +222,70 @@ const Register = Vue.component('register', {
 
                 <p class="newp_info">
                     <label for="caption">Caption:</label> <br>
-                    <textarea id="newp_txt" placeholder="write a caption..."></textarea>
+                    <textarea name="caption" id="newp_txt" placeholder="write a caption..."></textarea>
                 </p>
 
-                <button id="newp_button" type="button" class="btn btn-success">Submit</button>
+                <button id="newp_button" type="submit" class="btn btn-success">Submit</button>
 
             </form>
         </div>
      </div>
     `,
      data: function() {
-        return {}
+        return {
+            messages: '',
+            result: ''
+        }
+     },
+
+     methods: {
+        newPost: function(){
+            let self = this;
+            let new_posts = document.getElementById('new_posts');
+            let form_data = new FormData(new_posts);
+            fetch("/api/users/<userid>/posts", { method: 'POST', body: form_data, headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token'), 'X-CSRFToken': token }, credentials: 'same-origin'}).then(function (response) {
+                return response.json();
+                }).then(function (jsonResponse) {
+                    // display a success message
+                    console.log(jsonResponse);
+                    self.messages = jsonResponse;
+                }).catch(function (error) {
+                        console.log(error);
+                    });
+        }, 
+
+        getSecure: function () {
+            let self = this;
+            fetch('/api/secure', {
+                'headers': {
+                    // Try it with the `Basic` schema and you will see it gives an error message.
+                    // 'Authorization': 'Basic ' + localStorage.getItem('token')
+
+                    // JWT requires the Authorization schema to be `Bearer` instead of `Basic`
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (response) {
+                    let alert = document.querySelector('.alert');
+                    alert.classList.remove('alert-info', 'alert-danger');
+                    alert.classList.add('alert-success');
+
+                    let result = response.data;
+                    // successful response
+                    self.result = `Congrats! You have now made a successful request with a JSON Web Token. User ID is: ${result.user.id}.`;
+                })
+                .catch(function (error) {
+                    let alert = document.querySelector('.alert');
+                    alert.classList.remove('alert-info');
+                    alert.classList.add('alert-danger');
+
+                    // unsuccessful response (ie. there was an error)
+                    self.result = `There was an error. ${error.description}`;
+                })
+        }
      }
  });
 

@@ -6,9 +6,9 @@ This file creates your application.
 """
 
 from app import app, login_manager
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, session, g
 from flask_login import login_user, logout_user, current_user, login_required
-from .forms import UserForm, LoginForm
+from .forms import UserForm, LoginForm, PostForm
 from app.models import Users
 from . import db
 from werkzeug.utils import secure_filename
@@ -16,6 +16,46 @@ from werkzeug.security import check_password_hash
 import os
 import uuid
 import hashlib
+
+# Using JWT
+import jwt
+from flask import _request_ctx_stack
+from functools import wraps
+import base64
+
+# Create a JWT @requires_auth decorator
+# This decorator can be used to denote that a specific route should check
+# for a valid JWT token before displaying the contents of that route.
+def requires_auth(f):
+  @wraps(f)
+  def decorated(*args, **kwargs):
+    auth = request.headers.get('Authorization', None)
+    if not auth:
+      return jsonify({'code': 'authorization_header_missing', 'description': 'Authorization header is expected'}), 401
+
+    parts = auth.split()
+
+    if parts[0].lower() != 'bearer':
+      return jsonify({'code': 'invalid_header', 'description': 'Authorization header must start with Bearer'}), 401
+    elif len(parts) == 1:
+      return jsonify({'code': 'invalid_header', 'description': 'Token not found'}), 401
+    elif len(parts) > 2:
+      return jsonify({'code': 'invalid_header', 'description': 'Authorization header must be Bearer + \s + token'}), 401
+
+    token = parts[1]
+    try:
+         payload = jwt.decode(token, app.config['SALT'])
+
+    except jwt.ExpiredSignature:
+        return jsonify({'code': 'token_expired', 'description': 'token is expired'}), 401
+    except jwt.DecodeError:
+        return jsonify({'code': 'token_invalid_signature', 'description': 'Token signature is invalid'}), 401
+
+    g.current_user = user = payload
+    return f(*args, **kwargs)
+
+  return decorated
+
 
 ###
 # Routing for your application.
@@ -74,20 +114,37 @@ def login():
             if user is not None and check_password_hash(user.password, password):
 
                 login_user(user)
+                session['user_id'] = user.id
+                session['user_name'] = user.username
 
-                message = [{"message": "Successful Logged In!"}]
+                payload = {'id': user.id, 'username': user.username}
+                token = jwt.encode(payload, app.config['SALT'], algorithm='HS256').decode('utf-8')
+
+                return jsonify(data={'token': token}, message="Token Generated and User Logged In")
             else:
                 message = [{"errors": "Failed to Log In"}]
     message = jsonify(message=message)
     return message
 
+#@login_required
 @app.route('/api/auth/logout', methods=['GET'])
 def logout():
-    pass
+    logout_user()
+    #complete
+    session['user_id']
+
+    message = jsonify(message=message)
+    return message
 
 @app.route('/api/users/<userid>/posts', methods=['POST', 'GET'])
+@requires_auth
 def userPosts(userid):
-    pass
+    post = PostForm()
+    if request.method == "POST":
+        user = g.current_user
+        return jsonify(data={"user": user}, message="Success")
+    if request.method == "GET":
+        pass
 
 @app.route('/api/users/<userid>/follow', methods=['POST'])
 def follow(userid):
@@ -101,6 +158,14 @@ def posts():
 def like():
     pass
 
+@app.route('/api/secure', methods=['GET'])
+@requires_auth
+def api_secure():
+    # This data was retrieved from the payload of the JSON Web Token
+    # take a look at the requires_auth decorator code to see how we decoded
+    # the information from the JWT.
+    user = g.current_user
+    return jsonify(data={"user": user}, message="Success")
 
 @login_manager.user_loader
 def load_user(id):
