@@ -1,12 +1,11 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import StringField, TextAreaField
+from wtforms import StringField, TextAreaField, PasswordField
 from wtforms.validators import DataRequired, Email
 
 class UserForm(FlaskForm):
     username = StringField('username', validators=[DataRequired()])
-    password = StringField('password', validators=[DataRequired()])
-    confirm_password = StringField('confirm_password', validators=[DataRequired()])
+    password = PasswordField('password', validators=[DataRequired()])
     firstname = StringField('firstname', validators=[DataRequired()])
     lastname = StringField('last_name', validators=[DataRequired()])
     email = StringField('email', validators=[DataRequired()])
@@ -16,3 +15,11 @@ class UserForm(FlaskForm):
         FileRequired(),
         FileAllowed(['jpg', 'png', 'jpeg', 'Images only!'])
     ])
+
+class LoginForm(FlaskForm):
+    username = StringField('username', validators=[DataRequired()])
+    password = PasswordField('password', validators=[DataRequired()])
+
+class PostForm(FlaskForm):
+    photo = FileField('photo', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'Images only!'])])
+    caption = TextAreaField('caption', validators=[DataRequired()])
