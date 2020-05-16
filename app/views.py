@@ -9,7 +9,7 @@ from app import app, login_manager
 from flask import render_template, request, jsonify, session, g
 from flask_login import login_user, logout_user, current_user, login_required
 from .forms import UserForm, LoginForm, PostForm
-from app.models import Users
+from app.models import Users, Posts, Likes, Follows
 from . import db
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash
@@ -113,9 +113,9 @@ def login():
 
             if user is not None and check_password_hash(user.password, password):
 
-                login_user(user)
-                session['user_id'] = user.id
-                session['user_name'] = user.username
+                #login_user(user)
+                #session['user_id'] = user.id
+                #session['user_name'] = user.username
 
                 payload = {'id': user.id, 'username': user.username}
                 token = jwt.encode(payload, app.config['SALT'], algorithm='HS256').decode('utf-8')
@@ -128,23 +128,42 @@ def login():
 
 #@login_required
 @app.route('/api/auth/logout', methods=['GET'])
+@requires_auth
 def logout():
-    logout_user()
+    #logout_user()
     #complete
-    session['user_id']
-
-    message = jsonify(message=message)
-    return message
+    #session['user_id'] = None
+    user = g.current_user
+    return jsonify(data={"user": user}, message="Logged Out")
 
 @app.route('/api/users/<userid>/posts', methods=['POST', 'GET'])
 @requires_auth
 def userPosts(userid):
     post = PostForm()
+    message = [{"errors": "Invalid request"}]
     if request.method == "POST":
-        user = g.current_user
-        return jsonify(data={"user": user}, message="Success")
+        post.caption.data = request.form['caption']
+        post.photo.data = request.files['photo']
+        message = [{"errors": form_errors(post)}]
+        if post.validate_on_submit():
+            caption = post.caption.data
+            photo = post.photo.data
+
+            filename = genUniqueFileName(photo.filename)
+
+            postDB = Posts(userid, filename, caption)
+            db.session.add(postDB)
+            db.session.commit()
+            photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            message = [{"message": "Successful Posted!"}]
+        
     if request.method == "GET":
-        pass
+        posts = Posts.query.filter_by(user_id=userid).all()
+        return jsonify(posts=posts)
+
+    message = jsonify(message=message)
+    return message
 
 @app.route('/api/users/<userid>/follow', methods=['POST'])
 def follow(userid):
