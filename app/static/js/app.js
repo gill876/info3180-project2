@@ -49,8 +49,8 @@ const Home = Vue.component('home', {
             <hr>
             <p>Share your favorite moments with friends, family and the world.</p>
 
-            <button id="home_btn1" type="button" class="btn btn-success">Register</button>
-            <button id="home_btn2" type="button" class="btn btn-primary">Login</button>
+            <button id="home_btn1" @click="$router.push('register')" type="button" class="btn btn-success">Register</button>
+            <button id="home_btn2" @click="$router.push('login')" type="button" class="btn btn-primary">Login</button>
         </div>
     </div>
    `,
