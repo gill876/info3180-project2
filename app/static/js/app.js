@@ -18,7 +18,10 @@ Vue.component('app-header', {
           <li class="nav-item active">
             <router-link class="nav-link" to="/users/{user_id}">My Profile <span class="sr-only">(current)</span></router-link>
           </li>
-          <li class="nav-item active">
+          <li v-if="!this.token" class="nav-item active">
+            <router-link class="nav-link" to="/login">Login <span class="sr-only">(current)</span></router-link>
+          </li>
+          <li v-if="this.token" class="nav-item active">
             <router-link class="nav-link" to="/logout">Logout <span class="sr-only">(current)</span></router-link>
           </li>
         </ul>
@@ -130,6 +133,8 @@ const Register = Vue.component('register', {
                     // display a success message
                     console.log(jsonResponse);
                     self.messages = jsonResponse;
+                    alert("User Registered!")
+                    router.push("login")
                 }).catch(function (error) {
                         console.log(error);
                     });
@@ -186,6 +191,8 @@ const Register = Vue.component('register', {
                     localStorage.setItem('token', jwt_token);
                     console.info('Token generated and added to localStorage.');
                     self.token = jwt_token;
+                    alert("Logged In!")
+                    router.push("explore")
                 }).catch(function (error) {
                         console.log(error);
                     });
@@ -213,7 +220,7 @@ const Register = Vue.component('register', {
             {{ result }}
         </div>
         <div id="newp">
-            <form @submit.prevent="getSecure" method="POST" enctype="multipart/form-data" id="new_posts">
+            <form @submit.prevent="newPost" method="POST" enctype="multipart/form-data" id="new_posts">
 
                 <p class="newp_info">
                     <label id="newp_photo" for="photo">Photo:</label> <br>
@@ -239,22 +246,7 @@ const Register = Vue.component('register', {
      },
 
      methods: {
-        newPost: function(){
-            let self = this;
-            let new_posts = document.getElementById('new_posts');
-            let form_data = new FormData(new_posts);
-            fetch("/api/users/<userid>/posts", { method: 'POST', body: form_data, headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token'), 'X-CSRFToken': token }, credentials: 'same-origin'}).then(function (response) {
-                return response.json();
-                }).then(function (jsonResponse) {
-                    // display a success message
-                    console.log(jsonResponse);
-                    self.messages = jsonResponse;
-                }).catch(function (error) {
-                        console.log(error);
-                    });
-        }, 
-
-        getSecure: function () {
+        newPost: function () {
             let self = this;
             fetch('/api/secure', {
                 'headers': {

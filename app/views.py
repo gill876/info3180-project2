@@ -113,9 +113,9 @@ def login():
 
             if user is not None and check_password_hash(user.password, password):
 
-                login_user(user)
-                session['user_id'] = user.id
-                session['user_name'] = user.username
+                #login_user(user)
+                #session['user_id'] = user.id
+                #session['user_name'] = user.username
 
                 payload = {'id': user.id, 'username': user.username}
                 token = jwt.encode(payload, app.config['SALT'], algorithm='HS256').decode('utf-8')
@@ -128,10 +128,12 @@ def login():
 
 #@login_required
 @app.route('/api/auth/logout', methods=['GET'])
+@requires_auth
 def logout():
-    logout_user()
+    #logout_user()
     #complete
-    session['user_id']
+    #session['user_id'] = None
+    user = {"name": "Mr. Anonymous Unsecure"}
 
     message = jsonify(message=message)
     return message
@@ -159,7 +161,9 @@ def userPosts(userid):
             message = [{"message": "Successful Posted!"}]
         
     if request.method == "GET":
-        pass
+        posts = Posts.query.filter_by(user_id=userid).all()
+        return jsonify(posts=posts)
+
     message = jsonify(message=message)
     return message
 
