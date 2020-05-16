@@ -133,10 +133,8 @@ def logout():
     #logout_user()
     #complete
     #session['user_id'] = None
-    user = {"name": "Mr. Anonymous Unsecure"}
-
-    message = jsonify(message=message)
-    return message
+    user = g.current_user
+    return jsonify(data={"user": user}, message="Logged Out")
 
 @app.route('/api/users/<userid>/posts', methods=['POST', 'GET'])
 @requires_auth

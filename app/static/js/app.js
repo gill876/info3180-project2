@@ -311,5 +311,23 @@ const router = new VueRouter({
 // Instantiate our main Vue Instance
 let app = new Vue({
     el: "#app",
-    router
+    router, 
+    methods: {
+        logOut: function () {
+            let self = this;
+            fetch("/api/auth/logout", { method: 'GET', headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }})
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (response) {
+                    let result = response.data;
+                    alert(result.user.username + "logged out!")
+                    localStorage.removeItem('token');
+                    console.info('Token removed from localStorage.');
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+    }
 });
