@@ -258,32 +258,29 @@ const Register = Vue.component('register', {
             let self = this;
             fetch('/api/secure', {
                 'headers': {
-                    // Try it with the `Basic` schema and you will see it gives an error message.
-                    // 'Authorization': 'Basic ' + localStorage.getItem('token')
-
-                    // JWT requires the Authorization schema to be `Bearer` instead of `Basic`
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }
-            })
-                .then(function (response) {
+            }).then(function (response) {
                     return response.json();
-                })
-                .then(function (response) {
-                    let alert = document.querySelector('.alert');
-                    alert.classList.remove('alert-info', 'alert-danger');
-                    alert.classList.add('alert-success');
-
+                }).then(function (response) {
                     let result = response.data;
-                    // successful response
-                    self.result = `Congrats! You have now made a successful request with a JSON Web Token. User ID is: ${result.user.id}.`;
-                })
-                .catch(function (error) {
-                    let alert = document.querySelector('.alert');
-                    alert.classList.remove('alert-info');
-                    alert.classList.add('alert-danger');
-
-                    // unsuccessful response (ie. there was an error)
-                    self.result = `There was an error. ${error.description}`;
+                    console.log("User ID retrieved");
+                    return result.user.id
+                }).then( function(user_id){
+                    let self = this;
+                    let new_posts = document.getElementById('new_posts');
+                    let form_data = new FormData(new_posts);
+                    fetch("/api/users/" + user_id + "/posts", { method: 'POST', body: form_data, headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token'), 'X-CSRFToken': token }, credentials: 'same-origin'}).then(function (response) {
+                        return response.json();
+                        }).then(function (jsonResponse) {
+                            // display a success message
+                            console.log(jsonResponse);
+                            self.messages = jsonResponse;
+                        }).catch(function (error) {
+                                console.log(error);
+                            });
+                }).catch(function (error) {
+                    console.log(error);
                 })
         }
      }
