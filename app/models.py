@@ -1,5 +1,6 @@
 from . import db
 import datetime
+from werkzeug.security import generate_password_hash
 
 class Users(db.Model):
     __tablename__ = 'users'
@@ -17,7 +18,7 @@ class Users(db.Model):
 
     def __init__(self, username, password, firstname, lastname, email, location, biography, profile_photo):
         self.username = username
-        self.password = password
+        self.password = generate_password_hash(password, method='pbkdf2:sha256')
         self.firstname = firstname
         self.lastname = lastname
         self.email = email

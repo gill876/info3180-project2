@@ -18,7 +18,10 @@ Vue.component('app-header', {
           <li class="nav-item active">
             <router-link class="nav-link" to="/users/{user_id}">My Profile <span class="sr-only">(current)</span></router-link>
           </li>
-          <li class="nav-item active">
+          <li v-if="!this.token" class="nav-item active">
+            <router-link class="nav-link" to="/login">Login <span class="sr-only">(current)</span></router-link>
+          </li>
+          <li v-if="this.token" class="nav-item active">
             <router-link class="nav-link" to="/logout">Logout <span class="sr-only">(current)</span></router-link>
           </li>
         </ul>
@@ -49,8 +52,8 @@ const Home = Vue.component('home', {
             <hr>
             <p>Share your favorite moments with friends, family and the world.</p>
 
-            <button id="home_btn1" type="button" class="btn btn-success">Register</button>
-            <button id="home_btn2" type="button" class="btn btn-primary">Login</button>
+            <button id="home_btn1" @click="$router.push('register')" type="button" class="btn btn-success">Register</button>
+            <button id="home_btn2" @click="$router.push('login')" type="button" class="btn btn-primary">Login</button>
         </div>
     </div>
    `,
@@ -63,56 +66,79 @@ const Register = Vue.component('register', {
     template: `
      <div id="registration">
         <h2 id="reg_head">Register</h2>
+        <div>{{messages}}</div>
         <div id="reg">
-            <form @submit.prevent="reg_form" method="POST" enctype="multipart/form-data" id="reg_form">
+            <form @submit.prevent="regForm" method="POST" enctype="multipart/form-data" id="reg_form">
                 <p class="reg_form">
                     <label for="username">Username:</label> <br>
-                    <input class="form_ele" v-model="username" required placeholder="Enter username">
+                    <input class="form_ele" name="username" required placeholder="Enter username">
                 </p>
 
                 <p class="reg_form">
                     <label for="password">Password:</label> <br>
-                    <input class="form_ele" v-model="password" required placeholder="Enter password">
+                    <input name="password" type="password" class="form_ele" required placeholder="Enter password">
                 </p>
 
                 <p class="reg_form">
-                    <label for="first name">Firstname:</label> <br>
-                    <input class="form_ele" v-model="first_name" required placeholder="First name">
+                    <label for="firstname">Firstname:</label> <br>
+                    <input name="firstname" class="form_ele" required placeholder="First name">
                 </p>
 
                 <p class="reg_form">
-                    <label for="last name">Lastname:</label> <br>
-                    <input class="form_ele" v-model="last_name" required placeholder="Last name">
+                    <label for="lastname">Lastname:</label> <br>
+                    <input name="lastname" class="form_ele" required placeholder="Last name">
                 </p>
 
                 <p class="reg_form">
                     <label for="email">Email:</label> <br>
-                    <input class="form_ele" v-model="email" required placeholder="Enter email">
+                    <input name="email" class="form_ele" required placeholder="Enter email">
                 </p>
 
                 <p class="reg_form">
                     <label for="location">Location:</label> <br>
-                    <input class="form_ele" v-model="location" required placeholder="Enter location">
+                    <input name="location" class="form_ele" required placeholder="Enter location">
                 </p>
 
                 <p class="reg_form">
                     <label for="biography">Biography:</label> <br>
-                    <textarea id="form_bib" class="form_ele" v-model="biography" placeholder="add multiple lines"></textarea>
+                    <textarea name="biography" class="form_ele" placeholder="add multiple lines"></textarea>
                 </p>
 
                 <p class="reg_form">
                     <label for="photo">Photo:</label> <br>
-                    <input type="file" name="photo">
+                    <input id="photo" type="file" name="photo">
                 </p>
 
-                <button id="reg_button" type="button" class="btn btn-success">Register</button>
+                <button type="submit" id="reg_button" class="btn btn-success">Register</button>
 
             </form>
         </div>
      </div>
     `,
      data: function() {
-        return {}
+        return {
+            messages: ''
+        }
+     },
+
+     methods: {
+        regForm: function(){
+            //console.log("hi hello")
+            let self = this;
+            let reg_form = document.getElementById('reg_form');
+            let form_data = new FormData(reg_form);
+            fetch("/api/users/register", { method: 'POST', body: form_data, headers: { 'X-CSRFToken': token }, credentials: 'same-origin'}).then(function (response) {
+                return response.json();
+                }).then(function (jsonResponse) {
+                    // display a success message
+                    console.log(jsonResponse);
+                    self.messages = jsonResponse;
+                    alert("User Registered!")
+                    router.push("login")
+                }).catch(function (error) {
+                        console.log(error);
+                    });
+        }
      }
  });
 
@@ -120,27 +146,57 @@ const Register = Vue.component('register', {
     template: `
      <div id="login">
         <h2 id="log_head">Login</h2>
+        <div>{{messages}}</div>
         <div id="log">
-            <form @submit.prevent="log_form" method="POST" enctype="multipart/form-data" id="log_form">
+            <form @submit.prevent="loginForm" method="POST" id="log_form">
 
                 <p class="log_info">
                     <label  id="log_u" for="username">Username:</label> <br>
-                    <input class="log_ele" v-model="username" required placeholder="Enter username">
+                    <input name="username" class="log_ele" required placeholder="Enter username">
                 </p>
 
                 <p class="log_info">
                     <label for="password">Password:</label> <br>
-                    <input class="log_ele" v-model="password" required placeholder="Enter password">
+                    <input name="password" type="password" class="log_ele" required placeholder="Enter password">
                 </p>
 
-                <button id="log_button" type="button" class="btn btn-success">Login</button>
+                <button id="log_button" type="submit" class="btn btn-success">Login</button>
 
             </form>
         </div>
      </div>
     `,
      data: function() {
-        return {}
+        return {
+            messages: '',
+            token: ''
+        }
+     },
+
+    methods: {
+        loginForm: function(){
+            let self = this;
+            let log_form = document.getElementById('log_form');
+            let form_data = new FormData(log_form);
+            fetch("/api/auth/login", { method: 'POST', body: form_data, headers: { 'X-CSRFToken': token }, credentials: 'same-origin'}).then(function (response) {
+                return response.json();
+                }).then(function (jsonResponse) {
+                    // display a success message
+                    console.log(jsonResponse);
+                    self.messages = jsonResponse;
+                    let jwt_token = jsonResponse.data.token;
+
+                    // We store this token in localStorage so that subsequent API requests
+                    // can use the token until it expires or is deleted.
+                    localStorage.setItem('token', jwt_token);
+                    console.info('Token generated and added to localStorage.');
+                    self.token = jwt_token;
+                    alert("Logged In!")
+                    router.push("explore")
+                }).catch(function (error) {
+                        console.log(error);
+                    });
+        }
      }
  });
 
@@ -160,8 +216,11 @@ const Register = Vue.component('register', {
     template: `
      <div id="newposts">
         <h2 id="newp_head">New Posts</h2>
+        <div class="result alert alert-info">
+            {{ result }}
+        </div>
         <div id="newp">
-            <form @submit.prevent="new_posts" method="POST" enctype="multipart/form-data" id="new_posts">
+            <form @submit.prevent="newPost" method="POST" enctype="multipart/form-data" id="new_posts">
 
                 <p class="newp_info">
                     <label id="newp_photo" for="photo">Photo:</label> <br>
@@ -170,17 +229,52 @@ const Register = Vue.component('register', {
 
                 <p class="newp_info">
                     <label for="caption">Caption:</label> <br>
-                    <textarea id="newp_txt" v-model="caption" placeholder="write a caption..."></textarea>
+                    <textarea name="caption" id="newp_txt" placeholder="write a caption..."></textarea>
                 </p>
 
-                <button id="newp_button" type="button" class="btn btn-success">Submit</button>
+                <button id="newp_button" type="submit" class="btn btn-success">Submit</button>
 
             </form>
         </div>
      </div>
     `,
      data: function() {
-        return {}
+        return {
+            messages: '',
+            result: ''
+        }
+     },
+
+     methods: {
+        newPost: function () {
+            let self = this;
+            fetch('/api/secure', {
+                'headers': {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            }).then(function (response) {
+                    return response.json();
+                }).then(function (response) {
+                    let result = response.data;
+                    console.log("User ID retrieved");
+                    return result.user.id
+                }).then( function(user_id){
+                    let self = this;
+                    let new_posts = document.getElementById('new_posts');
+                    let form_data = new FormData(new_posts);
+                    fetch("/api/users/" + user_id + "/posts", { method: 'POST', body: form_data, headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token'), 'X-CSRFToken': token }, credentials: 'same-origin'}).then(function (response) {
+                        return response.json();
+                        }).then(function (jsonResponse) {
+                            // display a success message
+                            console.log(jsonResponse);
+                            self.messages = jsonResponse;
+                        }).catch(function (error) {
+                                console.log(error);
+                            });
+                }).catch(function (error) {
+                    console.log(error);
+                })
+        }
      }
  });
 
@@ -217,5 +311,23 @@ const router = new VueRouter({
 // Instantiate our main Vue Instance
 let app = new Vue({
     el: "#app",
-    router
+    router, 
+    methods: {
+        logOut: function () {
+            let self = this;
+            fetch("/api/auth/logout", { method: 'GET', headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }})
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (response) {
+                    let result = response.data;
+                    alert(result.user.username + "logged out!")
+                    localStorage.removeItem('token');
+                    console.info('Token removed from localStorage.');
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+    }
 });
