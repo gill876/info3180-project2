@@ -195,12 +195,44 @@ const Register = Vue.component('register', {
             <div id="mypro_info">
 
                 <div id="mypro_image">
+                    <img id="profile_img" src="/static/images/icons8-neutral-person-dark-skin-tone-48.png" alt="profile img">  
                 </div>
 
                 <div id="mypro_perdata">
+                    <p>
+                        John Brown
+                    </p>
+
+                    <p>
+                        Kingston, Jamaica
+                    </P>
+
+                    <p>
+                        Member since May 2020
+                    </p>
+
+                    <p>
+                        This is my short biography so you can learn more about me.
+                    </p>
                 </div>
 
                 <div id="mypro_phodata">
+                    <p>
+                        6
+                    </p>
+                    <p>
+                        post
+                    </p>
+
+                    <p>
+                        10
+                    </p>
+
+                    <p>
+                        followers
+                    </p>
+
+                    <button id="home_btn2" type="button" class="btn btn-primary">Follow</button>
                 </div>
 
             </div>
