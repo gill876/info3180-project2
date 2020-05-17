@@ -290,6 +290,29 @@ li{
 
 #mypro_btn{
     margin-top: 4.5em;
-    margin-bottom: 3.0em;
+    margin-bottom: 2.0em;
     min-width:190px;
+}
+
+#member_info{
+    margin-bottom: 2.0em;
+}
+
+#location_info{
+    margin-top: 2.0em;
+}
+
+#pos_num{
+    font-weight: bold;
+}
+
+#fol_num{
+    font-weight: bold;
+}
+
+#profile_img{
+    min-height: 180px;
+    min-width: 180px;
+    vertical-align: middle;
+    margin: auto;
 }

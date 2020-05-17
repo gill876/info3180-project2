@@ -199,15 +199,15 @@ const Register = Vue.component('register', {
                 </div>
 
                 <div id="mypro_perdata">
-                    <p>
+                    <h3>
                         John Brown
-                    </p>
+                    </h3>
 
-                    <p>
+                    <p id="location_info">
                         Kingston, Jamaica
                     </P>
 
-                    <p>
+                    <p id="member_info">
                         Member since May 2020
                     </p>
 
@@ -221,7 +221,7 @@ const Register = Vue.component('register', {
                     <div id="data_tracker">
 
                         <div id="post_count">
-                            <p>
+                            <p id="pos_num">
                                 6
                             </p>
 
@@ -231,7 +231,7 @@ const Register = Vue.component('register', {
                         </div>
 
                         <div id="follow_count">
-                            <p>
+                            <p id="fol_num">
                                 10
                             </p>
 
