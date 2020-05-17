@@ -219,7 +219,7 @@ const Register = Vue.component('register', {
                 <div id="mypro_phodata">
 
                     <div id="data_tracker">
-                    
+
                         <div id="post_count">
                             <p>
                                 6
@@ -242,7 +242,7 @@ const Register = Vue.component('register', {
                         </div>
                     </div>
 
-                    <button id="home_btn2" type="button" class="btn btn-primary">Follow</button>
+                    <button id="mypro_btn" type="button" class="btn btn-primary">Follow</button>
 
                 </div>
 

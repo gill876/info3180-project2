@@ -252,6 +252,7 @@ li{
     grid-template-rows: repeat(5, 1fr);
     grid-column-gap: 0px;
     grid-row-gap: 0px;
+    margin-right: 3.0em;
 }
 
 #mypro_image{
@@ -260,11 +261,13 @@ li{
 
 #mypro_perdata{
     grid-area: 1 / 2 / 6 / 4;
+
 }
 
 #mypro_phodata{
     grid-area: 1 / 4 / 6 / 6;
     text-align: center;
+    margin-left: 1.5em;
 }
 
 #data_tracker {
@@ -277,8 +280,16 @@ li{
 
 #post_count{
     grid-area: 1 / 1 / 6 / 3;
+    margin-left: 4.7em;
 }
 
 #follow_count{
     grid-area: 1 / 4 / 6 / 6;
+    margin-right: 8.0em;
+}
+
+#mypro_btn{
+    margin-top: 4.5em;
+    margin-bottom: 3.0em;
+    min-width:190px;
 }
