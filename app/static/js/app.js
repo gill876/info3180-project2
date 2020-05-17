@@ -156,8 +156,17 @@ const Register = Vue.component('register', {
                        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium 
                        voluptatum delenitiatque corrupti quos dolores et quas
                    </p>
-                   <p id="left_data"><img id="empty_heart" src="/static/images/icons8-heart-outline-50.png" alt="empty like"> 10 likes</p>
-                   <p id="right_data">16 May 2020</p>
+                   <div id="post_info">
+                        <div id="left_side">
+                                <p id="left_data"><img id="empty_heart" src="/static/images/icons8-heart-outline-50.png" alt="empty like"> 10 likes</p>
+                        </div>
+
+                        <div id="right_side">
+                                <p id="right_data">16 May 2020</p>
+                        </div>
+                   </div>
+                   
+                   
                </div>
             </ul>
 

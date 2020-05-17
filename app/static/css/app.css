@@ -203,15 +203,31 @@ body {
     width: 680px;
 }
 
-#left_data{
+#post_info{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    }
+
+#left_side{
+    grid-area: 1 / 1 / 6 / 3; 
     text-align: left;
-    float: left;
+}
+
+#right_side{
+    grid-area: 1 / 4 / 6 / 6;
+    text-align: right;
+}
+
+/* #left_data{
+    text-align: left;
 }
 
 #right_data{
     text-align: right;
-    float: right;
-}
+} */
 
 #empty_heart{
     width: 30px;
