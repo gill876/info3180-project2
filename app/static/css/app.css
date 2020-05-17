@@ -239,17 +239,28 @@ li{
     list-style: none;
 }
 
-/* #left_data{
-    text-align: left;
-}
-
-#right_data{
-    text-align: right;
-} */
-
 #empty_heart{
     width: 30px;
     height: 30px;
 }
 
-/* LOGIN */
+/* MY PROFILE */
+#mypro{
+    background-color: white;
+}
+
+#mypro_info{
+
+}
+
+#mypro_image{
+    
+}
+
+#mypro_perdata{
+    
+}
+
+#mypro_phodata{
+    
+}
