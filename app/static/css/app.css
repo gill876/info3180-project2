@@ -177,6 +177,45 @@ body {
   min-width:342px;
 }
 
-/* LOGIN */
+/* EXPLORE */
+
+#exp{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+#explore_blank{
+    grid-area: 1 / 1 / 6 / 4;
+    background-color: white;
+    max-width: 700px;
+}
+
+#new_post_btn{
+    grid-area: 1 / 4 / 6 / 6;
+    text-align: right;
+}
+
+#user_post{
+    height: 400px;
+    width: 680px;
+}
+
+#left_data{
+    text-align: left;
+    float: left;
+}
+
+#right_data{
+    text-align: right;
+    float: right;
+}
+
+#empty_heart{
+    width: 30px;
+    height: 30px;
+}
 
 /* LOGIN */
