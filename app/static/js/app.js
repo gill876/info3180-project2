@@ -187,6 +187,18 @@ const Register = Vue.component('register', {
      }
  });
 
+ const MyProfile = Vue.component('myprofile', {
+    template: `
+     <div id="myprofile">
+        <div id="newp">
+        </div>
+     </div>
+    `,
+     data: function() {
+        return {}
+     }
+ });
+
  const NewPosts = Vue.component('newposts', {
     template: `
      <div id="newposts">
@@ -237,6 +249,8 @@ const router = new VueRouter({
         {path: "/login", component: Login},
 
         {path: "/explore", component: Explore},
+
+        {path: "/users", component: MyProfile},
 
         {path: "/posts/new", component: NewPosts},
 
