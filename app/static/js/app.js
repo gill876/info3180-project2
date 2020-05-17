@@ -190,7 +190,12 @@ const Register = Vue.component('register', {
  const MyProfile = Vue.component('myprofile', {
     template: `
      <div id="myprofile">
-        <div id="newp">
+        <div id="mypro">
+            <div id="mypro_info">
+            </div>
+
+            <div>
+            </div>
         </div>
      </div>
     `,
