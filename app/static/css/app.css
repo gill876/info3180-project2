@@ -264,4 +264,5 @@ li{
 
 #mypro_phodata{
     grid-area: 1 / 4 / 6 / 6;
+    text-align: center;
 }
