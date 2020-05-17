@@ -191,11 +191,13 @@ const Register = Vue.component('register', {
     template: `
      <div id="myprofile">
         <div id="mypro">
+
             <div id="mypro_info">
             </div>
 
-            <div>
+            <div id="mypro_images">
             </div>
+            
         </div>
      </div>
     `,
