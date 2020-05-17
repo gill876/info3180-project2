@@ -195,7 +195,7 @@ const Register = Vue.component('register', {
             <div id="mypro_info">
 
                 <div id="mypro_image">
-                    <img id="profile_img" src="/static/images/icons8-neutral-person-dark-skin-tone-48.png" alt="profile img">  
+                    <img id="mypro_img" src="/static/images/icons8-neutral-person-dark-skin-tone-48.png" alt="profile img">  
                 </div>
 
                 <div id="mypro_perdata">
