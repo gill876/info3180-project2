@@ -249,6 +249,9 @@ const Register = Vue.component('register', {
             </div>
 
             <div id="mypro_images">
+                <ul>
+                    <li v-for="post in posts"><img id="img_box" src="{{ url_for('static', filename='uploads/' + post) }}"/></li>
+                </ul>
             </div>
 
         </div>
@@ -310,7 +313,7 @@ const router = new VueRouter({
 
         {path: "/explore", component: Explore},
 
-        {path: "/users", component: MyProfile},
+        {path: "/users/{user_id}", component: MyProfile},
 
         {path: "/posts/new", component: NewPosts},
 

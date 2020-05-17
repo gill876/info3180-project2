@@ -323,3 +323,18 @@ li{
     vertical-align: middle;
     margin: auto;
 }
+
+#mypro_images{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#img_box{
+    min-width: 100px;
+    min-height: 100px;
+    max-width: 280px;
+    max-height: 280px;
+}
