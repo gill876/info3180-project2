@@ -149,25 +149,31 @@ const Register = Vue.component('register', {
     <div id="explore">
        <div id="exp">
            <ul>
-               <div id="explore_blank">
-                   <p><img id="camera_logo" src="/static/images/photography.png" alt="camera logo"> profile name</p>
-                   <img id="user_post" src="/static/images/XX---Grid---NYC-2560x1600.jpg" alt="user post">
-                   <p>
-                       At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium 
-                       voluptatum delenitiatque corrupti quos dolores et quas
-                   </p>
-                   <div id="post_info">
-                        <div id="left_side">
-                                <p id="left_data"><img id="empty_heart" src="/static/images/icons8-heart-outline-50.png" alt="empty like"> 10 likes</p>
-                        </div>
+                <li>
+                    <div id="explore_blank">
+                        <p id="post_user">
+                                <img id="profile_img" src="/static/images/icons8-neutral-person-dark-skin-tone-48.png" alt="profile img">   
+                                profile name
+                        </p>
 
-                        <div id="right_side">
-                                <p id="right_data">16 May 2020</p>
+                        <img id="user_post" src="/static/images/XX---Grid---NYC-2560x1600.jpg" alt="user post">
+
+                        <p id="post_para">
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium 
+                            voluptatum delenitiatque corrupti quos dolores et quas
+                        </p>
+
+                        <div id="post_info">
+                                <div id="left_side">
+                                        <p id="left_data"><img id="empty_heart" src="/static/images/icons8-heart-outline-50.png" alt="empty like"> 10 likes</p>
+                                </div>
+
+                                <div id="right_side">
+                                        <p id="right_data">16 May 2020</p>
+                                </div>
                         </div>
-                   </div>
-                   
-                   
-               </div>
+                    </div>
+                </li>
             </ul>
 
             <div id="new_post_btn">
