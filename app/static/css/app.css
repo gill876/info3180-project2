@@ -266,3 +266,19 @@ li{
     grid-area: 1 / 4 / 6 / 6;
     text-align: center;
 }
+
+#data_tracker {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+#post_count{
+    grid-area: 1 / 1 / 6 / 3;
+}
+
+#follow_count{
+    grid-area: 1 / 4 / 6 / 6;
+}
