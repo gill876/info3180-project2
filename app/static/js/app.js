@@ -18,16 +18,26 @@ Vue.component('app-header', {
           <li class="nav-item active">
             <router-link class="nav-link" to="/users/{user_id}">My Profile <span class="sr-only">(current)</span></router-link>
           </li>
-          <li v-if="!this.token" class="nav-item active">
+          <li v-if="!status_log" class="nav-item active">
             <router-link class="nav-link" to="/login">Login <span class="sr-only">(current)</span></router-link>
           </li>
-          <li v-if="this.token" class="nav-item active">
+          <li v-else class="nav-item active">
             <router-link class="nav-link" to="/logout">Logout <span class="sr-only">(current)</span></router-link>
           </li>
         </ul>
       </div>
     </nav>
-    `
+    `,
+
+    computed: {
+        status_log: function() {
+            if (sessionStorage.getItem('token')) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 });
 
 Vue.component('app-footer', {
@@ -38,6 +48,36 @@ Vue.component('app-footer', {
         </div>
     </footer>
     `
+});
+
+const Logout = Vue.component('logout', {
+    template: `
+    <div>Logging out...</div>
+    `,
+    methods: {
+        logOut: function () {
+            let self = this;
+            fetch("/api/auth/logout", { method: 'GET', headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') }})
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (response) {
+                    let result = response.data;
+                    alert(result.user.username + " logged out!")
+                    sessionStorage.removeItem('token');
+                    console.info('Token removed from sessionStorage.');
+                    router.push("/")
+                    location.reload()
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+    },
+
+    beforeMount(){
+        this.logOut()
+    }
 });
 
 const Home = Vue.component('home', {
@@ -193,6 +233,7 @@ const Register = Vue.component('register', {
                     self.token = jwt_token;
                     alert("Logged In!")
                     router.push("explore")
+                    location.reload()
                 }).catch(function (error) {
                         console.log(error);
                     });
@@ -251,12 +292,12 @@ const Register = Vue.component('register', {
             <div id="mypro_info">
 
                 <div id="mypro_image">
-                    <img id="mypro_img" src="/static/images/icons8-neutral-person-dark-skin-tone-48.png" alt="profile img">  
+                    <img id="mypro_img" :src="'/static/uploads/' + profile_img" alt="profile img">  
                 </div>
 
                 <div id="mypro_perdata">
                     <h3>
-                        John Brown
+                        {{fullname}}
                     </h3>
 
                     <p id="location_info">
@@ -306,15 +347,60 @@ const Register = Vue.component('register', {
 
             <div id="mypro_images">
                 <ul>
-                    <li v-for="post in posts"><img id="img_box" src="{{ url_for('static', filename='uploads/' + post) }}"/></li>
+                    <li v-for="post in posts">
+                        <img id="img_box" v-bind:src="'/static/photos/' + post"/>
+                    </li>
                 </ul>
             </div>
-
+            <!--<img src="/static/js/test.jpg"/>-->
         </div>
      </div>
     `,
      data: function() {
-        return {}
+        return {
+            posts: [],
+            profile_img: '',
+            fullname: 'Failed',
+            followers: 0,
+            following: 0,
+            biography: '',
+            joined: ''
+        }
+     },
+
+     created: function(){
+        let self = this;
+        fetch('/api/secure', {
+            'headers': {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+            }
+        }).then(function (response) {
+                return response.json();
+            }).then(function (response) {
+                let result = response.data;
+                console.log("User ID retrieved");
+                self.user_id = result.user.id
+                return result.user.id
+            }).then( function(user_id){
+                let self = this;
+                fetch("/api/users/" + user_id + "/posts", { method: 'GET', headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') }})
+                .then(function (response) {
+                    return response.json();
+                    })
+                    .then(function (jsonResponse) {
+                        // display a success message
+                        console.log(jsonResponse.posts);
+                        console.log(jsonResponse.profile_img);
+                        self.posts = jsonResponse.posts;
+                        self.profile_img = jsonResponse.profile_img;
+                        self.fullname = jsonResponse.fullname;
+                    })
+                    .catch(function (error) {
+                            console.log(error);
+                        });
+            }).catch(function (error) {
+                console.log(error);
+            })
      }
  });
 
@@ -363,6 +449,7 @@ const Register = Vue.component('register', {
                 }).then(function (response) {
                     let result = response.data;
                     console.log("User ID retrieved");
+                    self.user_id = result.user.id
                     return result.user.id
                 }).then( function(user_id){
                     let self = this;
@@ -405,6 +492,8 @@ const router = new VueRouter({
 
         {path: "/login", component: Login},
 
+        {path: "/logout", component: Logout},
+
         {path: "/explore", component: Explore},
 
         {path: "/users/{user_id}", component: MyProfile},
@@ -419,23 +508,10 @@ const router = new VueRouter({
 // Instantiate our main Vue Instance
 let app = new Vue({
     el: "#app",
-    router, 
-    methods: {
-        logOut: function () {
-            let self = this;
-            fetch("/api/auth/logout", { method: 'GET', headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') }})
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (response) {
-                    let result = response.data;
-                    alert(result.user.username + "logged out!")
-                    sessionStorage.removeItem('token');
-                    console.info('Token removed from sessionStorage.');
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
+    router,
+    data: function(){
+        return {
+            user_id: 0
         }
     }
 });

@@ -160,7 +160,12 @@ def userPosts(userid):
         
     if request.method == "GET":
         posts = Posts.query.filter_by(user_id=userid).all()
-        return jsonify(posts=posts)
+        posts = [p.photo for p in posts]
+        user = Users.query.filter_by(id=userid).first()
+        fullname = user.lastname + " " + user.firstname
+        profile_img = user.profile_photo
+        #print(posts)
+        return jsonify(posts=posts,profile_img=profile_img,fullname=fullname)
 
     message = jsonify(message=message)
     return message
