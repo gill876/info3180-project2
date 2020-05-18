@@ -243,6 +243,81 @@ const Register = Vue.component('register', {
      }
  });
 
+ const MyProfile = Vue.component('myprofile', {
+    template: `
+     <div id="myprofile">
+        <div id="mypro">
+
+            <div id="mypro_info">
+
+                <div id="mypro_image">
+                    <img id="mypro_img" src="/static/images/icons8-neutral-person-dark-skin-tone-48.png" alt="profile img">  
+                </div>
+
+                <div id="mypro_perdata">
+                    <h3>
+                        John Brown
+                    </h3>
+
+                    <p id="location_info">
+                        Kingston, Jamaica
+                    </P>
+
+                    <p id="member_info">
+                        Member since May 2020
+                    </p>
+
+                    <p>
+                        This is my short biography so you can learn more about me.
+                    </p>
+                </div>
+
+                <div id="mypro_phodata">
+
+                    <div id="data_tracker">
+
+                        <div id="post_count">
+                            <p id="pos_num">
+                                6
+                            </p>
+
+                            <p>
+                                post
+                            </p>
+                        </div>
+
+                        <div id="follow_count">
+                            <p id="fol_num">
+                                10
+                            </p>
+
+                            <p>
+                                followers
+                            </p>
+                            
+                        </div>
+                    </div>
+
+                    <button id="mypro_btn" type="button" class="btn btn-primary">Follow</button>
+
+                </div>
+
+            </div>
+
+            <div id="mypro_images">
+                <ul>
+                    <li v-for="post in posts"><img id="img_box" src="{{ url_for('static', filename='uploads/' + post) }}"/></li>
+                </ul>
+            </div>
+
+        </div>
+     </div>
+    `,
+     data: function() {
+        return {}
+     }
+ });
+
  const NewPosts = Vue.component('newposts', {
     template: `
      <div id="newposts">
