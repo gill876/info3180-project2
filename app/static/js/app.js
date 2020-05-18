@@ -16,7 +16,7 @@ Vue.component('app-header', {
             <router-link class="nav-link" to="/explore">Explore <span class="sr-only">(current)</span></router-link>
           </li>
           <li class="nav-item active">
-            <router-link class="nav-link" to="/users/{user_id}">My Profile <span class="sr-only">(current)</span></router-link>
+            <router-link class="nav-link" to="/users/:user_id">My Profile <span class="sr-only">(current)</span></router-link>
           </li>
           <li v-if="!status_log" class="nav-item active">
             <router-link class="nav-link" to="/login">Login <span class="sr-only">(current)</span></router-link>
@@ -442,7 +442,7 @@ const Register = Vue.component('register', {
      },
 
      methods: {
-        retrieveUser: function(user__id=null){
+        retrieveUser: function(){
             let self = this;
             fetch('/api/secure', {
                 'headers': {
@@ -454,12 +454,7 @@ const Register = Vue.component('register', {
                     let result = response.data;
                     console.log("User ID retrieved");
                     self.user_id = result.user.id
-                    //return result.user.id
-                    if (user__id !== null){
-                        return user__id
-                    } else {
-                        return result.user.id
-                    }
+                    return result.user.id
                 }).then( function(user_id){
                     //let self = this;
                     fetch("/api/users/" + user_id + "/posts", { method: 'GET', headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') }})
@@ -579,7 +574,7 @@ const router = new VueRouter({
 
         {path: "/explore", component: Explore},
 
-        {path: "/users/{user_id}", component: MyProfile},
+        {path: "/users/:user_id", component: MyProfile},
 
         {path: "/posts/new", component: NewPosts},
 
