@@ -353,6 +353,7 @@ const Register = Vue.component('register', {
  });
 
  const MyProfile = Vue.component('myprofile', {
+    props: ['user_id'],
     template: `
      <div id="myprofile">
         <div id="mypro">
@@ -453,8 +454,10 @@ const Register = Vue.component('register', {
                 }).then(function (response) {
                     let result = response.data;
                     console.log("User ID retrieved");
-                    self.user_id = result.user.id
-                    return result.user.id
+                    console.log(self.user_id);
+                    return self.user_id; //gettting from prop
+                    //self.user_id = result.user.id
+                    //return result.user.id
                 }).then( function(user_id){
                     //let self = this;
                     fetch("/api/users/" + user_id + "/posts", { method: 'GET', headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') }})
@@ -574,7 +577,7 @@ const router = new VueRouter({
 
         {path: "/explore", component: Explore},
 
-        {path: "/users/:user_id", component: MyProfile},
+        {path: "/users/:user_id", component: MyProfile, props: true},
 
         {path: "/posts/new", component: NewPosts},
 
@@ -586,10 +589,5 @@ const router = new VueRouter({
 // Instantiate our main Vue Instance
 let app = new Vue({
     el: "#app",
-    router,
-    data: function(){
-        return {
-            user_id: 0
-        }
-    }
+    router
 });
