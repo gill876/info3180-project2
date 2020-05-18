@@ -186,10 +186,10 @@ const Register = Vue.component('register', {
                     self.messages = jsonResponse;
                     let jwt_token = jsonResponse.data.token;
 
-                    // We store this token in localStorage so that subsequent API requests
+                    // We store this token in sessionStorage so that subsequent API requests
                     // can use the token until it expires or is deleted.
-                    localStorage.setItem('token', jwt_token);
-                    console.info('Token generated and added to localStorage.');
+                    sessionStorage.setItem('token', jwt_token);
+                    console.info('Token generated and added to sessionStorage.');
                     self.token = jwt_token;
                     alert("Logged In!")
                     router.push("explore")
@@ -356,7 +356,7 @@ const Register = Vue.component('register', {
             let self = this;
             fetch('/api/secure', {
                 'headers': {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token')
                 }
             }).then(function (response) {
                     return response.json();
@@ -368,7 +368,7 @@ const Register = Vue.component('register', {
                     let self = this;
                     let new_posts = document.getElementById('new_posts');
                     let form_data = new FormData(new_posts);
-                    fetch("/api/users/" + user_id + "/posts", { method: 'POST', body: form_data, headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token'), 'X-CSRFToken': token }, credentials: 'same-origin'}).then(function (response) {
+                    fetch("/api/users/" + user_id + "/posts", { method: 'POST', body: form_data, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token'), 'X-CSRFToken': token }, credentials: 'same-origin'}).then(function (response) {
                         return response.json();
                         }).then(function (jsonResponse) {
                             // display a success message
@@ -423,15 +423,15 @@ let app = new Vue({
     methods: {
         logOut: function () {
             let self = this;
-            fetch("/api/auth/logout", { method: 'GET', headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }})
+            fetch("/api/auth/logout", { method: 'GET', headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') }})
                 .then(function (response) {
                     return response.json();
                 })
                 .then(function (response) {
                     let result = response.data;
                     alert(result.user.username + "logged out!")
-                    localStorage.removeItem('token');
-                    console.info('Token removed from localStorage.');
+                    sessionStorage.removeItem('token');
+                    console.info('Token removed from sessionStorage.');
                 })
                 .catch(function (error) {
                     console.log(error);
