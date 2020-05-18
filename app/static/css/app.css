@@ -177,6 +177,164 @@ body {
   min-width:342px;
 }
 
-/* LOGIN */
+/* EXPLORE */
 
-/* LOGIN */
+#exp{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+#explore_blank{
+    grid-area: 1 / 1 / 6 / 4;
+    background-color: white;
+    max-width: 700px;
+    border: 1px solid #888;
+    box-shadow: 0 0 1px 1px #888;
+    border-radius: 5px;
+}
+
+#new_post_btn{
+    grid-area: 1 / 4 / 6 / 6;
+    text-align: right;
+}
+
+#user_post{
+    height: 400px;
+    width: 680px;
+}
+
+#post_para{
+    margin: 0.9em;
+}
+
+#post_user{
+    margin: 0.9em;
+}
+
+#post_info{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    margin-top: 2.9em;
+}
+
+#left_side{
+    grid-area: 1 / 1 / 6 / 3; 
+    text-align: left;
+    margin-left: 0.9em;
+}
+
+#right_side{
+    grid-area: 1 / 4 / 6 / 6;
+    text-align: right;
+    margin-right: 1.3em;
+}
+
+li{
+    list-style: none;
+}
+
+#empty_heart{
+    width: 30px;
+    height: 30px;
+}
+
+#profile_img{
+    max-width: 30px;
+    max-height: 30px;
+}
+
+/* MY PROFILE */
+#mypro_info{
+    background-color: white;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    margin-right: 3.0em;
+}
+
+#mypro_image{
+    grid-area: 1 / 1 / 6 / 2;
+}
+
+#mypro_perdata{
+    grid-area: 1 / 2 / 6 / 4;
+
+}
+
+#mypro_phodata{
+    grid-area: 1 / 4 / 6 / 6;
+    text-align: center;
+    margin-left: 1.5em;
+}
+
+#data_tracker {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+#post_count{
+    grid-area: 1 / 1 / 6 / 3;
+    margin-left: 4.7em;
+}
+
+#follow_count{
+    grid-area: 1 / 4 / 6 / 6;
+    margin-right: 8.0em;
+}
+
+#mypro_btn{
+    margin-top: 4.5em;
+    margin-bottom: 2.0em;
+    min-width:190px;
+}
+
+#member_info{
+    margin-bottom: 2.0em;
+}
+
+#location_info{
+    margin-top: 2.0em;
+}
+
+#pos_num{
+    font-weight: bold;
+}
+
+#fol_num{
+    font-weight: bold;
+}
+
+#mypro_img{
+    min-height: 180px;
+    min-width: 180px;
+    max-height: 180px;
+    max-width: 180px;
+    vertical-align: middle;
+    margin: auto;
+}
+
+#mypro_images{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#img_box{
+    min-width: 100px;
+    min-height: 100px;
+    max-width: 280px;
+    max-height: 280px;
+}
