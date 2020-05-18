@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import StringField, TextAreaField, PasswordField
+from wtforms import StringField, TextAreaField, PasswordField, IntegerField
 from wtforms.validators import DataRequired, Email
 
 class UserForm(FlaskForm):
@@ -23,3 +23,6 @@ class LoginForm(FlaskForm):
 class PostForm(FlaskForm):
     photo = FileField('photo', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'Images only!'])])
     caption = TextAreaField('caption', validators=[DataRequired()])
+
+class LikeForm(FlaskForm):
+    userid = IntegerField('userid', validators=[DataRequired()])

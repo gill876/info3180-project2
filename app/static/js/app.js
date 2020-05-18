@@ -246,27 +246,31 @@ const Register = Vue.component('register', {
     <div id="explore">
        <div id="exp">
            <ul>
-                <li>
+                <li v-for="post in allposts">
                     <div id="explore_blank">
                         <p id="post_user">
-                                <img id="profile_img" src="/static/images/icons8-neutral-person-dark-skin-tone-48.png" alt="profile img">   
-                                profile name
+                                <img id="profile_img" :src="'/static/uploads/' + post.userpic" alt="profile img">   
+                                <span @click="profile(post.user_id)">{{post.username}}</span>
                         </p>
 
-                        <img id="user_post" src="/static/images/XX---Grid---NYC-2560x1600.jpg" alt="user post">
+                        <img id="user_post" :src="'/static/uploads/' + post.photo" alt="user post">
 
                         <p id="post_para">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium 
-                            voluptatum delenitiatque corrupti quos dolores et quas
+                            {{post.caption}}
                         </p>
 
                         <div id="post_info">
                                 <div id="left_side">
-                                        <p id="left_data"><img id="empty_heart" src="/static/images/icons8-heart-outline-50.png" alt="empty like"> 10 likes</p>
+                                        <form id="likephoto" v-on:submit.prevent method="POST">
+                                            <p id="left_data">
+                                            <img @click="likephoto(post.id)" id="empty_heart" src="/static/images/icons8-heart-outline-50.png" alt="empty like"> {{post.likes}} likes
+                                            </p>
+                                            <input name="userid" type="hidden" v-bind:value="userid"></input>
+                                        </form>
                                 </div>
 
                                 <div id="right_side">
-                                        <p id="right_data">16 May 2020</p>
+                                        <p id="right_data">{{post.created_on}}</p>
                                 </div>
                         </div>
                     </div>
@@ -274,13 +278,77 @@ const Register = Vue.component('register', {
             </ul>
 
             <div id="new_post_btn">
-                <button id="home_btn2" type="button" class="btn btn-primary">New Post</button>
+                <button id="home_btn2" @click="$router.push('/posts/new')" class="btn btn-primary">New Post</button>
             </div>
        </div>
     </div>
    `,
      data: function() {
-        return {}
+        return {
+            allposts: [],
+            userid: 0
+        }
+     },
+
+     methods: {
+        likephoto: function(postid){
+            console.log(postid);
+            let likephoto = document.getElementById('likephoto');
+            let form_data = new FormData(likephoto);
+            fetch("/api/posts/" + postid + "/like", { method: 'POST', body: form_data, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token'), 'X-CSRFToken': token }, credentials: 'same-origin'})
+            .then(function (response) {
+                return response.json();
+                }).then(function (jsonResponse) {
+                    // display a success message
+                    alert("Photo liked!");
+                    this.pagestart;
+                    location.reload();
+                    console.log(jsonResponse.message);
+                }).catch(function (error) {
+                        console.log(error);
+                    });
+        },
+
+        profile: function(userid){ 
+            this.$router.push("/users/"+userid)
+           
+        },
+
+        pagestart: function(){
+            let self = this;
+            fetch('/api/secure', {
+                'headers': {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+                }
+            }).then(function (response) {
+                    return response.json();
+                }).then(function (response) {
+                    let result = response.data;
+                    console.log("User ID retrieved");
+                    self.userid = result.user.id;
+                    return result.user.id;
+                }).then( function(user_id){
+                    //let self = this;
+                    fetch("/api/posts", { method: 'GET', headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') }})
+                    .then(function (response) {
+                        return response.json();
+                        })
+                        .then(function (jsonResponse) {
+                            // display a success message
+                            self.allposts = jsonResponse.allposts;
+                            console.log(jsonResponse.allposts);
+                        })
+                        .catch(function (error) {
+                                console.log(error);
+                            });
+                }).catch(function (error) {
+                    console.log(error);
+                })
+         }
+     },
+
+     created: function(){
+         this.pagestart();
      }
  });
 
@@ -301,15 +369,15 @@ const Register = Vue.component('register', {
                     </h3>
 
                     <p id="location_info">
-                        Kingston, Jamaica
+                        {{location}}
                     </P>
 
                     <p id="member_info">
-                        Member since May 2020
+                        {{joined}}
                     </p>
 
                     <p>
-                        This is my short biography so you can learn more about me.
+                        {{biography}}
                     </p>
                 </div>
 
@@ -319,7 +387,7 @@ const Register = Vue.component('register', {
 
                         <div id="post_count">
                             <p id="pos_num">
-                                6
+                                {{postnum}}
                             </p>
 
                             <p>
@@ -329,7 +397,7 @@ const Register = Vue.component('register', {
 
                         <div id="follow_count">
                             <p id="fol_num">
-                                10
+                                {{followers}}
                             </p>
 
                             <p>
@@ -348,7 +416,7 @@ const Register = Vue.component('register', {
             <div id="mypro_images">
                 <ul>
                     <li v-for="post in posts">
-                        <img id="img_box" v-bind:src="'/static/photos/' + post"/>
+                        <img id="img_box" v-bind:src="'/static/uploads/' + post"/>
                     </li>
                 </ul>
             </div>
@@ -362,9 +430,10 @@ const Register = Vue.component('register', {
             profile_img: '',
             fullname: 'Failed',
             followers: 0,
-            following: 0,
+            postnum: 0,
             biography: '',
-            joined: ''
+            joined: '',
+            location: ''
         }
      },
 
@@ -382,18 +451,21 @@ const Register = Vue.component('register', {
                 self.user_id = result.user.id
                 return result.user.id
             }).then( function(user_id){
-                let self = this;
+                //let self = this;
                 fetch("/api/users/" + user_id + "/posts", { method: 'GET', headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') }})
                 .then(function (response) {
                     return response.json();
                     })
                     .then(function (jsonResponse) {
                         // display a success message
-                        console.log(jsonResponse.posts);
-                        console.log(jsonResponse.profile_img);
                         self.posts = jsonResponse.posts;
                         self.profile_img = jsonResponse.profile_img;
                         self.fullname = jsonResponse.fullname;
+                        self.location = jsonResponse.location;
+                        self.joined = jsonResponse.joined;
+                        self.biography = jsonResponse.biography;
+                        self.followers = jsonResponse.followers;
+                        self.postnum = jsonResponse.postnum;
                     })
                     .catch(function (error) {
                             console.log(error);

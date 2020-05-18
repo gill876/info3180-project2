@@ -266,7 +266,8 @@ li{
 
 #mypro_perdata{
     grid-area: 1 / 2 / 6 / 4;
-
+    position: relative;
+    left: 30px;
 }
 
 #mypro_phodata{
