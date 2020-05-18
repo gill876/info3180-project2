@@ -26,3 +26,6 @@ class PostForm(FlaskForm):
 
 class LikeForm(FlaskForm):
     userid = IntegerField('userid', validators=[DataRequired()])
+
+class FollowForm(FlaskForm):
+    following = IntegerField('following', validators=[DataRequired()])

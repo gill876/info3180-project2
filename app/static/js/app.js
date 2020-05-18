@@ -440,7 +440,10 @@ const Register = Vue.component('register', {
                         </div>
                     </div>
 
-                    <button id="mypro_btn" type="button" class="btn btn-primary">Follow</button>
+                    <form id="follow-user" v-on:submit.prevent="followUser()" method="POST">
+                        <input name="following" type="hidden" v-bind:value="user_id"></input>
+                        <button id="follow-button" type="submit" class="btn btn-primary">Follow</button>
+                    </form>
 
                 </div>
 
@@ -516,7 +519,30 @@ const Register = Vue.component('register', {
                 }).catch(function (error) {
                     console.log(error);
                 })
-         }
+        },
+
+        followUser: function(){
+            let self = this;
+            console.log("***follow***")
+            console.log(self.user_id);
+            console.log(self.current_user_id);
+            console.log("************");
+
+            let follow_user = document.getElementById('follow-user');
+            let form_data = new FormData(follow_user);
+            fetch("/api/users/" + self.current_user_id + "/follow", { method: 'POST', body: form_data, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token'), 'X-CSRFToken': token }, credentials: 'same-origin'})
+            .then(function (response) {
+                return response.json();
+                }).then(function (jsonResponse) {
+                    // display a success message
+                    alert("User followed!");
+                    this.pagestart;
+                    location.reload();
+                    console.log(jsonResponse.message);
+                }).catch(function (error) {
+                        console.log(error);
+                    });
+        }
      }
  });
 

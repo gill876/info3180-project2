@@ -8,7 +8,7 @@ This file creates your application.
 from app import app, login_manager
 from flask import render_template, request, jsonify, session, g
 from flask_login import login_user, logout_user, current_user, login_required
-from .forms import UserForm, LoginForm, PostForm, LikeForm
+from .forms import UserForm, LoginForm, PostForm, LikeForm, FollowForm
 from app.models import Users, Posts, Likes, Follows
 from . import db
 from werkzeug.utils import secure_filename
@@ -181,8 +181,23 @@ def userPosts(userid):
     return message
 
 @app.route('/api/users/<userid>/follow', methods=['POST'])
+@requires_auth
 def follow(userid):
-    pass
+    following = FollowForm()
+    #print("inside")
+    if request.method == "POST":
+        following.following.data = request.form['following']
+        if following.validate_on_submit():
+            followid = following.following.data
+            #print("User to follow: ", followerid)
+            #print("Current user: ", userid)
+            #print("pass")
+            followDB = Follows(followid, userid)
+            db.session.add(followDB)
+            db.session.commit()
+            return jsonify(message="success")
+    print("failed")
+    return jsonify(message="failed")
 
 @app.route('/api/posts', methods=['GET'])
 @requires_auth
