@@ -16,7 +16,7 @@ Vue.component('app-header', {
             <router-link class="nav-link" to="/explore">Explore <span class="sr-only">(current)</span></router-link>
           </li>
           <li class="nav-item active">
-            <router-link class="nav-link" to="/users/:user_id">My Profile <span class="sr-only">(current)</span></router-link>
+            <router-link class="nav-link" @click="profile()" v-bind:to="'/users/' + c_user">My Profile <span class="sr-only">(current)</span></router-link>
           </li>
           <li v-if="!status_log" class="nav-item active">
             <router-link class="nav-link" to="/login">Login <span class="sr-only">(current)</span></router-link>
@@ -37,6 +37,38 @@ Vue.component('app-header', {
                 return false;
             }
         }
+    },
+
+    methods: {
+        profile: function(){ 
+            //this.$router.push("/users/"+userid)
+            location.reload();
+        }
+    },
+
+    data: function(){
+        return {
+            c_user: 0
+        }
+    },
+
+    created: function(){
+        let self = this;
+        fetch('/api/secure', {
+            'headers': {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+            }
+        }).then(function (response) {
+                return response.json();
+            }).then(function (response) {
+                let result = response.data;
+                console.log("User ID retrieved");
+                self.c_user = result.user.id;
+                //return result.user.id;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 });
 
@@ -434,7 +466,8 @@ const Register = Vue.component('register', {
             postnum: 0,
             biography: '',
             joined: '',
-            location: ''
+            location: '',
+            current_user_id: 0
         }
      },
 
@@ -455,6 +488,8 @@ const Register = Vue.component('register', {
                     let result = response.data;
                     console.log("User ID retrieved");
                     console.log(self.user_id);
+                    self.current_user_id = result.user.id;
+                    console.log(self.current_user_id);
                     return self.user_id; //gettting from prop
                     //self.user_id = result.user.id
                     //return result.user.id
