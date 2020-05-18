@@ -438,41 +438,52 @@ const Register = Vue.component('register', {
      },
 
      created: function(){
-        let self = this;
-        fetch('/api/secure', {
-            'headers': {
-                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
-            }
-        }).then(function (response) {
-                return response.json();
+        this.retrieveUser();
+     },
+
+     methods: {
+        retrieveUser: function(user__id=null){
+            let self = this;
+            fetch('/api/secure', {
+                'headers': {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+                }
             }).then(function (response) {
-                let result = response.data;
-                console.log("User ID retrieved");
-                self.user_id = result.user.id
-                return result.user.id
-            }).then( function(user_id){
-                //let self = this;
-                fetch("/api/users/" + user_id + "/posts", { method: 'GET', headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') }})
-                .then(function (response) {
                     return response.json();
-                    })
-                    .then(function (jsonResponse) {
-                        // display a success message
-                        self.posts = jsonResponse.posts;
-                        self.profile_img = jsonResponse.profile_img;
-                        self.fullname = jsonResponse.fullname;
-                        self.location = jsonResponse.location;
-                        self.joined = jsonResponse.joined;
-                        self.biography = jsonResponse.biography;
-                        self.followers = jsonResponse.followers;
-                        self.postnum = jsonResponse.postnum;
-                    })
-                    .catch(function (error) {
-                            console.log(error);
-                        });
-            }).catch(function (error) {
-                console.log(error);
-            })
+                }).then(function (response) {
+                    let result = response.data;
+                    console.log("User ID retrieved");
+                    self.user_id = result.user.id
+                    //return result.user.id
+                    if (user__id !== null){
+                        return user__id
+                    } else {
+                        return result.user.id
+                    }
+                }).then( function(user_id){
+                    //let self = this;
+                    fetch("/api/users/" + user_id + "/posts", { method: 'GET', headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') }})
+                    .then(function (response) {
+                        return response.json();
+                        })
+                        .then(function (jsonResponse) {
+                            // display a success message
+                            self.posts = jsonResponse.posts;
+                            self.profile_img = jsonResponse.profile_img;
+                            self.fullname = jsonResponse.fullname;
+                            self.location = jsonResponse.location;
+                            self.joined = jsonResponse.joined;
+                            self.biography = jsonResponse.biography;
+                            self.followers = jsonResponse.followers;
+                            self.postnum = jsonResponse.postnum;
+                        })
+                        .catch(function (error) {
+                                console.log(error);
+                            });
+                }).catch(function (error) {
+                    console.log(error);
+                })
+         }
      }
  });
 
