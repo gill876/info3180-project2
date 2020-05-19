@@ -59,7 +59,7 @@ class Posts(db.Model):
         self.caption = caption
     
     def __repr__(self):
-        return '<Post %r>' % (self.id)
+        return '<Post %r, %r, %r, %r, %r>' % (self.id, self.user_id, self.photo, self.caption, self.created_on)
 
 class Likes(db.Model):
     __tablename__ = 'likes'

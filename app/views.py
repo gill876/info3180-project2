@@ -8,7 +8,7 @@ This file creates your application.
 from app import app, login_manager
 from flask import render_template, request, jsonify, session, g
 from flask_login import login_user, logout_user, current_user, login_required
-from .forms import UserForm, LoginForm, PostForm
+from .forms import UserForm, LoginForm, PostForm, LikeForm, FollowForm
 from app.models import Users, Posts, Likes, Follows
 from . import db
 from werkzeug.utils import secure_filename
@@ -160,22 +160,79 @@ def userPosts(userid):
         
     if request.method == "GET":
         posts = Posts.query.filter_by(user_id=userid).all()
-        return jsonify(posts=posts)
+        posts = [p.photo for p in posts]
+        user = Users.query.filter_by(id=userid).first()
+        fullname = user.lastname + " " + user.firstname
+        year = user.joined_on.year
+        month = user.joined_on.strftime("%B")
+        day = user.joined_on.day
+        joined = str(month) + " " + str(day) + ", " + str(year)
+        biography = user.biography
+        username = user.username
+        location = user.location
+        profile_img = user.profile_photo
+        postnum = len(posts)
+        #print(Follows.query.filter_by(user_id=userid).all())
+        followers = len(Follows.query.filter_by(user_id=userid).all())
+        #print(posts)
+        return jsonify(posts=posts,profile_img=profile_img,fullname=fullname,joined=joined,biography=biography,location=location,username=username,postnum=postnum,followers=followers)
 
     message = jsonify(message=message)
     return message
 
 @app.route('/api/users/<userid>/follow', methods=['POST'])
+@requires_auth
 def follow(userid):
-    pass
+    following = FollowForm()
+    #print("inside")
+    if request.method == "POST":
+        following.following.data = request.form['following']
+        if following.validate_on_submit():
+            followid = following.following.data
+            #print("User to follow: ", followerid)
+            #print("Current user: ", userid)
+            #print("pass")
+            followDB = Follows(followid, userid)
+            db.session.add(followDB)
+            db.session.commit()
+            return jsonify(message="success")
+    print("failed")
+    return jsonify(message="failed")
 
 @app.route('/api/posts', methods=['GET'])
+@requires_auth
 def posts():
-    pass
+    posts = Posts.query.order_by(Posts.id).all()
+    allposts = []
+    for p in posts:
+        post = {}
+        post['id'] = p.id
+        post['user_id'] = p.user_id
+        likes = Likes.query.filter_by(post_id=post['id']).all()
+        post['likes'] = len(likes)
+        user = Users.query.filter_by(id=post['user_id']).first()
+        post['username'] = user.username
+        post['userpic'] = user.profile_photo
+        post['photo'] = p.photo
+        post['caption'] = p.caption
+        post['created_on'] = p.created_on.strftime("%B") + " " + str(p.created_on.day) + ", " + str(p.created_on.year)
+        allposts+= [post]
+    return jsonify(allposts=allposts)
 
 @app.route('/api/posts/<postid>/like', methods=['POST'])
-def like():
-    pass
+def like(postid):
+    like = LikeForm()
+    if request.method == "POST":
+        like.userid.data = request.form['userid']
+        if like.validate_on_submit():
+            userid = like.userid.data
+
+            likeDB = Likes(userid, postid)
+            db.session.add(likeDB)
+            db.session.commit()
+            return jsonify(message="successful")
+
+    return jsonify(message="failed")
 
 @app.route('/api/secure', methods=['GET'])
 @requires_auth

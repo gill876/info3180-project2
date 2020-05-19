@@ -17,3 +17,4 @@ venv/
 
 # Saved photos
 /app/static/uploads/
+app/static/js/test.jpg
