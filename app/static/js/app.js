@@ -550,9 +550,6 @@ const Register = Vue.component('register', {
     template: `
      <div id="newposts">
         <h2 id="newp_head">New Posts</h2>
-        <div class="result alert alert-info">
-            {{ result }}
-        </div>
         <div id="newp">
             <form @submit.prevent="newPost" method="POST" enctype="multipart/form-data" id="new_posts">
 
@@ -602,6 +599,8 @@ const Register = Vue.component('register', {
                         }).then(function (jsonResponse) {
                             // display a success message
                             console.log(jsonResponse);
+                            alert("Image uploaded!");
+                            router.push("explore")
                             self.messages = jsonResponse;
                         }).catch(function (error) {
                                 console.log(error);
