@@ -600,7 +600,7 @@ const Register = Vue.component('register', {
                             // display a success message
                             console.log(jsonResponse);
                             alert("Image uploaded!");
-                            router.push("explore")
+                            router.push("/explore")
                             self.messages = jsonResponse;
                         }).catch(function (error) {
                                 console.log(error);
