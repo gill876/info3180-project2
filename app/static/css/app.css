@@ -258,6 +258,9 @@ li{
     grid-column-gap: 0px;
     grid-row-gap: 0px;
     margin-right: 3.0em;
+    border: 1px solid #888;
+    box-shadow: 0 0 1px 1px #888;
+    border-radius: 5px;
 }
 
 #mypro_image{
